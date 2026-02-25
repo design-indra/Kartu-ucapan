@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kartu Ucapan Wisuda & Lulus</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080810;--panel:#0c0c18;--bdr:rgba(200,170,60,.18);--navy:#1e3a5f;--gold:#f0c040;--gold2:#fde68a;--blue:#60a0f0;--white:#f8f4ff;--ash:#8888a8;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 10%,rgba(30,58,95,.5) 0%,transparent 55%),radial-gradient(ellipse at 80% 90%,rgba(200,160,40,.2) 0%,transparent 55%);color:var(--white);font-family:'EB Garamond',serif;min-height:100vh;}
+.site-header{text-align:center;padding:1.8rem 1rem 1.3rem;border-bottom:1px solid var(--bdr);background:rgba(0,0,0,.3);backdrop-filter:blur(6px);position:sticky;top:0;z-index:100;}
+.site-header span{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.3em;color:var(--gold);display:block;margin-bottom:.25rem;}
+.site-header h1{font-family:'Cinzel',serif;font-size:clamp(1.1rem,3vw,1.7rem);font-weight:400;color:var(--gold2);letter-spacing:.08em;}
+.site-header h1 em{color:var(--blue);font-style:normal;}
+.workspace{display:flex;min-height:calc(100vh - 72px);}
+.sidebar{width:310px;min-width:270px;max-width:310px;background:var(--panel);border-right:1px solid var(--bdr);padding:1.4rem;overflow-y:auto;max-height:calc(100vh - 72px);position:sticky;top:72px;}
+.sidebar::-webkit-scrollbar{width:4px;}.sidebar::-webkit-scrollbar-thumb{background:rgba(200,170,60,.3);border-radius:4px;}
+.s-section{margin-bottom:1.3rem;}
+.s-title{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.22em;color:var(--gold);display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;}
+.s-title::after{content:'';flex:1;height:1px;background:var(--bdr);}
+.field{margin-bottom:.8rem;}.field label{display:block;font-size:.8rem;color:var(--ash);margin-bottom:.28rem;}
+.field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--white);font-family:'EB Garamond',serif;font-size:.93rem;padding:.5rem .75rem;border-radius:3px;outline:none;transition:border-color .25s;}
+.field input:focus,.field textarea:focus{border-color:rgba(200,170,60,.5);}
+.field textarea{resize:vertical;min-height:80px;line-height:1.55;}
+.field select option{background:#0c0c18;}
+.upload-zone{border:2px dashed rgba(200,170,60,.3);border-radius:6px;padding:1.1rem;text-align:center;cursor:pointer;transition:all .3s;position:relative;}
+.upload-zone:hover{border-color:var(--gold);background:rgba(200,170,60,.06);}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-zone .icon{font-size:1.6rem;margin-bottom:.3rem;}.upload-zone p{font-size:.78rem;color:var(--ash);}
+.upload-zone p strong{color:var(--gold);display:block;}
+.thumb-preview{width:66px;height:66px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin:.6rem auto 0;display:none;}
+.mode-tabs{display:flex;gap:.4rem;margin-bottom:.8rem;}
+.mode-tab{flex:1;padding:.5rem;border:1px solid var(--bdr);border-radius:4px;font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.08em;color:var(--ash);cursor:pointer;text-align:center;background:none;transition:all .25s;}
+.mode-tab:hover,.mode-tab.active{border-color:var(--gold);color:var(--gold);background:rgba(200,170,60,.1);}
+.tmpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;}
+.tmpl-item{border:2px solid var(--bdr);border-radius:4px;cursor:pointer;overflow:hidden;aspect-ratio:3/4;background:#080810;transition:border-color .25s,transform .2s;position:relative;}
+.tmpl-item:hover{border-color:rgba(200,170,60,.7);transform:scale(1.03);}
+.tmpl-item.active{border-color:var(--gold);}
+.tmpl-item canvas{width:100%;height:100%;display:block;}
+.tmpl-item .lbl{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-family:'Cinzel',serif;font-size:.42rem;letter-spacing:.06em;color:var(--gold2);text-align:center;padding:2px 0;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem;}
+.toggle-row>span{font-size:.8rem;color:var(--ash);}
+.sw{position:relative;width:36px;height:19px;cursor:pointer;}.sw input{display:none;}
+.sw-track{position:absolute;inset:0;background:rgba(255,255,255,.08);border-radius:20px;border:1px solid var(--bdr);transition:background .3s;}
+.sw-track::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;background:var(--ash);border-radius:50%;transition:transform .3s,background .3s;}
+.sw input:checked+.sw-track{background:rgba(200,170,60,.2);}
+.sw input:checked+.sw-track::after{transform:translateX(17px);background:var(--gold);}
+.color-row{display:flex;gap:.4rem;flex-wrap:wrap;}
+.cdot{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s;}
+.cdot:hover,.cdot.active{border-color:var(--gold);transform:scale(1.2);}
+.size-pills{display:flex;gap:.4rem;flex-wrap:wrap;}
+.size-pill{padding:.3rem .7rem;border:1px solid var(--bdr);border-radius:20px;font-family:'Cinzel',serif;font-size:.57rem;letter-spacing:.08em;color:var(--ash);cursor:pointer;transition:all .25s;background:none;}
+.size-pill:hover,.size-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(200,170,60,.08);}
+.btn-dl{width:100%;padding:.78rem;margin-top:.5rem;background:linear-gradient(135deg,#8a6800,var(--gold),#8a6800);background-size:200%;border:none;color:#080800;font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.14em;cursor:pointer;border-radius:3px;transition:background-position .4s,transform .2s;}
+.btn-dl:hover{background-position:100%;transform:translateY(-1px);}
+.btn-ref{width:100%;padding:.65rem;margin-top:.4rem;background:transparent;border:1px solid rgba(200,170,60,.35);color:var(--gold2);font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.1em;cursor:pointer;border-radius:3px;transition:all .3s;}
+.btn-ref:hover{background:rgba(200,170,60,.1);}
+.main-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2rem 1.5rem 4rem;gap:1rem;overflow-y:auto;}
+.canvas-label{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.2em;color:var(--ash);text-align:center;}
+#mainCanvas{width:min(560px,92vw);box-shadow:0 20px 80px rgba(0,0,0,.8),0 0 0 1px rgba(200,170,60,.2);border-radius:3px;display:block;cursor:pointer;transition:box-shadow .3s;}
+#mainCanvas:hover{box-shadow:0 24px 90px rgba(0,0,0,.85),0 0 0 1px rgba(200,170,60,.6),0 0 60px rgba(200,170,60,.12);}
+.canvas-hint{font-size:.75rem;font-style:italic;color:var(--ash);text-align:center;}
+@media(max-width:720px){.workspace{flex-direction:column;}.sidebar{width:100%;max-width:100%;max-height:none;position:static;border-right:none;border-bottom:1px solid var(--bdr);}}
+</style>
+</head>
+<body>
+<div class="site-header">
+  <span>🎓 SELAMAT & SUKSES 🎓</span>
+  <h1>Kartu <em>Wisuda</em> &amp; Selamat Lulus</h1>
+</div>
+<div class="workspace">
+<aside class="sidebar">
+  <div class="s-section">
+    <div class="s-title">Mode Kartu</div>
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="modeWisuda" onclick="setMode('wisuda')">🎓 Wisuda</button>
+      <button class="mode-tab" id="modeLulus" onclick="setMode('lulus')">✅ Selamat Lulus</button>
+    </div>
+  </div>
+  <div class="s-section">
+    <div class="s-title">Foto</div>
+    <div class="upload-zone"><input type="file" accept="image/*" id="photoInput"><div class="icon">🖼️</div><p><strong>Upload Foto Wisuda</strong>JPG, PNG</p></div>
+    <img id="photoThumb" class="thumb-preview">
+  </div>
+  <div class="s-section">
+    <div class="s-title">Logo Instansi</div>
+    <div class="upload-zone"><input type="file" accept="image/*" id="logoInput"><div class="icon">🏛️</div><p><strong>Logo Kampus/Sekolah</strong>PNG transparan</p></div>
+    <img id="logoThumb" class="thumb-preview">
+  </div>
+  <div class="s-section">
+    <div class="s-title">Template</div>
+    <div class="tmpl-grid" id="tmplGrid"></div>
+  </div>
+  <div class="s-section">
+    <div class="s-title">Ukuran</div>
+    <div class="size-pills">
+      <button class="size-pill active" data-w="1080" data-h="1080">1:1 Post</button>
+      <button class="size-pill" data-w="1080" data-h="1920">9:16 Story</button>
+      <button class="size-pill" data-w="1080" data-h="1350">4:5 Feed</button>
+    </div>
+  </div>
+  <div class="s-section">
+    <div class="s-title">Informasi</div>
+    <div class="field"><label>Nama Lengkap + Gelar</label><input type="text" id="fNama" value="Muhammad Fauzan, S.Kom."></div>
+    <div class="field"><label id="labelInstitusi">Universitas / Kampus</label><input type="text" id="fInstitusi" value="Universitas Indonesia"></div>
+    <div class="field"><label id="labelFakultas">Fakultas / Jurusan</label><input type="text" id="fFakultas" value="Fakultas Ilmu Komputer"></div>
+    <div class="field"><label id="labelJenjang">Jenjang / Predikat</label><input type="text" id="fJenjang" value="S1 — Cumlaude"></div>
+    <div class="field"><label>Tahun Lulus / Wisuda</label><input type="text" id="fTahun" value="2024"></div>
+    <div class="field"><label>Dari / Pengirim Ucapan</label><input type="text" id="fDari" value="Keluarga Besar"></div>
+  </div>
+  <div class="s-section">
+    <div class="s-title">Teks & Pesan</div>
+    <div class="field"><label>Judul Kartu</label><input type="text" id="fJudul" value="Selamat Wisuda"></div>
+    <div class="field"><label>Sub Judul</label><input type="text" id="fSub" value="Semoga ilmu yang diraih membawa keberkahan"></div>
+    <div class="field"><label>Pesan / Doa</label><textarea id="fPesan">Selamat atas keberhasilan dan jerih payah selama ini. Semoga ilmu yang diraih bermanfaat bagi diri, keluarga, dan bangsa. Terus berprestasi dan raih cita-citamu!</textarea></div>
+    <div class="field"><label>Sosmed</label><input type="text" id="fSocial" value=""></div>
+  </div>
+  <div class="s-section">
+    <div class="s-title">Warna Tema</div>
+    <div class="color-row" id="colorRow"></div>
+  </div>
+  <div class="s-section">
+    <div class="s-title">Elemen</div>
+    <div class="toggle-row"><span>Ornamen & Konfeti</span><label class="sw"><input type="checkbox" id="tOrnament" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Bingkai / Border</span><label class="sw"><input type="checkbox" id="tBorder" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Logo Kampus</span><label class="sw"><input type="checkbox" id="tLogo" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Info Institusi</span><label class="sw"><input type="checkbox" id="tInfo" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Sosmed</span><label class="sw"><input type="checkbox" id="tSocial" checked><span class="sw-track"></span></label></div>
+  </div>
+  <button class="btn-dl" onclick="doDownload()">⬇ UNDUH KARTU PNG</button>
+  <button class="btn-ref" onclick="doRender()">↻ PERBARUI PRATINJAU</button>
+</aside>
+<main class="main-area">
+  <div class="canvas-label">✦ PRATINJAU KARTU ✦</div>
+  <canvas id="mainCanvas" width="1080" height="1080"></canvas>
+  <p class="canvas-hint">Klik kartu untuk mengunduh · Resolusi tinggi siap cetak</p>
+</main>
+</div>
+<canvas id="renderCanvas" width="1080" height="1080" style="display:none"></canvas>
+<script>
+const S={template:0,theme:0,cw:1080,ch:1080,photoImg:null,logoImg:null,mode:'wisuda'};
+const THEMES=[
+  {name:'Navy Emas',bg:'#040818',bg2:'#080e28',acc:'#2563eb',acc2:'#93c5fd',gold:'#f0c040',gold2:'#fde68a',ink:'#f0f4ff',sub:'#93c5fd',ribbon:'#1d4ed8'},
+  {name:'Ungu Kerajaan',bg:'#0c0818',bg2:'#180c28',acc:'#7c3aed',acc2:'#c4b5fd',gold:'#f0c040',gold2:'#fde68a',ink:'#f5f0ff',sub:'#c4b5fd',ribbon:'#6d28d9'},
+  {name:'Hijau Emerald',bg:'#041810',bg2:'#06281a',acc:'#059669',acc2:'#6ee7b7',gold:'#f0c040',gold2:'#fde68a',ink:'#f0fff8',sub:'#6ee7b7',ribbon:'#047857'},
+  {name:'Merah Maroon',bg:'#180408',bg2:'#280608',acc:'#9b1c1c',acc2:'#fca5a5',gold:'#f0c040',gold2:'#fde68a',ink:'#fff5f5',sub:'#fca5a5',ribbon:'#7f1d1d'},
+  {name:'Hitam Emas',bg:'#080808',bg2:'#121212',acc:'#d97706',acc2:'#fde68a',gold:'#f0c040',gold2:'#fde68a',ink:'#fffbeb',sub:'#fde68a',ribbon:'#b45309'},
+  {name:'Teal Modern',bg:'#040c10',bg2:'#061520',acc:'#0891b2',acc2:'#a5f3fc',gold:'#f0c040',gold2:'#fde68a',ink:'#f0feff',sub:'#a5f3fc',ribbon:'#0e7490'},
+];
+const TMPL_NAMES=['Toga Elegan','Bintang Kejora','Modern Bold','Klasik Kampus','Konfeti Ceria','Minimalis Pro'];
+
+function rgba(h,a){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return`rgba(${r},${g},${b},${a})`;}
+function wrapLines(ctx,text,maxW){const words=text.split(' ');const lines=[];let cur='';words.forEach(w=>{const t=cur?cur+' '+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}else cur=t;});if(cur)lines.push(cur);return lines;}
+function fillWrapped(ctx,text,x,y,maxW,lh){ctx.textAlign='center';const lines=wrapLines(ctx,text,maxW);lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lh));return lines.length*lh;}
+function drawGLine(ctx,cx,y,hw,color,lw=1.5){const g=ctx.createLinearGradient(cx-hw,y,cx+hw,y);g.addColorStop(0,'transparent');g.addColorStop(.35,color);g.addColorStop(.65,color);g.addColorStop(1,'transparent');ctx.save();ctx.strokeStyle=g;ctx.lineWidth=lw;ctx.beginPath();ctx.moveTo(cx-hw,y);ctx.lineTo(cx+hw,y);ctx.stroke();ctx.restore();}
+function drawStar(ctx,cx,cy,r,color,alpha=1){ctx.save();ctx.globalAlpha*=alpha;ctx.fillStyle=color;ctx.beginPath();for(let i=0;i<10;i++){const a=i*Math.PI/5-Math.PI/2;const rd=i%2===0?r:r*.4;i===0?ctx.moveTo(cx+Math.cos(a)*rd,cy+Math.sin(a)*rd):ctx.lineTo(cx+Math.cos(a)*rd,cy+Math.sin(a)*rd);}ctx.closePath();ctx.fill();ctx.restore();}
+
+function drawCirclePhoto(ctx,photo,cx,cy,r,borderColor,bw=7){
+  ctx.save();ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=25;ctx.shadowOffsetY=8;
+  ctx.beginPath();ctx.arc(cx,cy,r+bw+3,0,Math.PI*2);ctx.fillStyle=borderColor;ctx.fill();
+  ctx.shadowColor='transparent';ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.clip();
+  if(photo){const sc=Math.max(r*2/photo.width,r*2/photo.height);ctx.drawImage(photo,cx-photo.width*sc/2,cy-photo.height*sc/2,photo.width*sc,photo.height*sc);}
+  else{ctx.fillStyle=rgba(borderColor,.15);ctx.fill();ctx.font=`${r*.55}px serif`;ctx.fillStyle=rgba('#fff',.3);ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎓',cx,cy);ctx.textBaseline='alphabetic';}
+  ctx.restore();
+}
+
+function drawBg(ctx,W,H,theme){
+  const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,theme.bg2);g.addColorStop(1,theme.bg);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  const rg=ctx.createRadialGradient(W*.5,H*.2,0,W*.5,H*.2,W*.6);rg.addColorStop(0,rgba(theme.acc,.1));rg.addColorStop(1,'transparent');ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
+  const vg=ctx.createRadialGradient(W/2,H/2,H*.1,W/2,H/2,H*.75);vg.addColorStop(0,'transparent');vg.addColorStop(1,'rgba(0,0,0,.5)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+}
+
+// Toga hat
+function drawToga(ctx,cx,cy,size,color,alpha=1){
+  ctx.save();ctx.globalAlpha*=alpha;
+  // board
+  ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(cx-size,cy);ctx.lineTo(cx+size,cy);ctx.lineTo(cx+size*.8,cy+size*.15);ctx.lineTo(cx-size*.8,cy+size*.15);ctx.closePath();ctx.fill();
+  // top
+  ctx.beginPath();ctx.rect(cx-size*.25,cy-size*.6,size*.5,size*.6);ctx.fill();
+  ctx.beginPath();ctx.arc(cx,cy-size*.6,size*.25,0,Math.PI*2);ctx.fill();
+  // tassel
+  ctx.strokeStyle=theme_current.gold;ctx.lineWidth=size*.08;ctx.beginPath();ctx.moveTo(cx+size*.5,cy);ctx.lineTo(cx+size*.5,cy+size*.55);ctx.stroke();
+  ctx.fillStyle=theme_current.gold;ctx.beginPath();ctx.arc(cx+size*.5,cy+size*.55,size*.1,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+
+// Confetti
+function drawConfetti(ctx,W,H,colors){
+  for(let i=0;i<80;i++){
+    const x=Math.random()*W,y=Math.random()*H;
+    const s=Math.random()*8+3,rot=Math.random()*Math.PI*2;
+    ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=Math.random()*.7+.15;
+    ctx.fillStyle=colors[Math.floor(Math.random()*colors.length)];
+    if(Math.random()>.5)ctx.fillRect(-s/2,-s/4,s,s/2);
+    else{ctx.beginPath();ctx.arc(0,0,s/2,0,Math.PI*2);ctx.fill();}
+    ctx.restore();
+  }
+}
+
+// Diploma scroll
+function drawScroll(ctx,cx,cy,w,h,color,alpha=1){
+  ctx.save();ctx.globalAlpha*=alpha;
+  // main scroll
+  const sg=ctx.createLinearGradient(cx-w/2,cy,cx+w/2,cy);
+  sg.addColorStop(0,rgba(color,.7));sg.addColorStop(.1,rgba(color,1));sg.addColorStop(.9,rgba(color,1));sg.addColorStop(1,rgba(color,.7));
+  ctx.fillStyle=sg;ctx.beginPath();ctx.roundRect(cx-w/2,cy-h/2,w,h,4);ctx.fill();
+  // end rolls
+  [-1,1].forEach(d=>{const g2=ctx.createLinearGradient(cx+d*(w/2-h*.15),cy-h/2,cx+d*(w/2+h*.08),cy+h/2);g2.addColorStop(0,rgba(color,.5));g2.addColorStop(.5,rgba(color,.9));g2.addColorStop(1,rgba(color,.5));ctx.fillStyle=g2;ctx.beginPath();ctx.ellipse(cx+d*(w/2-h*.08),cy,h*.18,h/2,0,0,Math.PI*2);ctx.fill();});
+  ctx.restore();
+}
+
+let theme_current=THEMES[0];
+
+function getVals(){return{
+  nama:document.getElementById('fNama').value,institusi:document.getElementById('fInstitusi').value,
+  fakultas:document.getElementById('fFakultas').value,jenjang:document.getElementById('fJenjang').value,
+  tahun:document.getElementById('fTahun').value,dari:document.getElementById('fDari').value,
+  judul:document.getElementById('fJudul').value,sub:document.getElementById('fSub').value,
+  pesan:document.getElementById('fPesan').value,social:document.getElementById('fSocial').value,
+  ornament:document.getElementById('tOrnament').checked,border:document.getElementById('tBorder').checked,
+  showLogo:document.getElementById('tLogo').checked,showInfo:document.getElementById('tInfo').checked,
+  showSocial:document.getElementById('tSocial').checked,mode:S.mode,
+};}
+
+// ── T0: TOGA ELEGAN ──
+function renderT0(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);const cx=W/2;
+  theme_current=theme;
+  if(v.ornament){for(let i=0;i<40;i++){const x=Math.random()*W,y=Math.random()*H;ctx.save();ctx.globalAlpha=Math.random()*.4+.05;ctx.fillStyle=theme.gold2;ctx.beginPath();ctx.arc(x,y,Math.random()*2+.5,0,Math.PI*2);ctx.fill();ctx.restore();}
+    drawToga(ctx,W*.15,H*.2,W*.07,theme.gold,.6);drawToga(ctx,W*.85,H*.18,W*.065,rgba(theme.gold,.8),.5);}
+  if(v.border){ctx.strokeStyle=theme.gold;ctx.lineWidth=2;ctx.strokeRect(W*.04,H*.04,W*.92,H*.92);ctx.strokeStyle=rgba(theme.gold,.3);ctx.lineWidth=.8;ctx.strokeRect(W*.055,H*.055,W*.89,H*.89);}
+  let y=H*.07;
+  if(v.showLogo&&logo){ctx.drawImage(logo,cx-W*.05,y,W*.1,W*.1);y+=W*.12;}
+  ctx.font=`${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.7);ctx.textAlign='center';ctx.letterSpacing='0.25em';ctx.fillText('✦  '+v.judul.toUpperCase()+'  ✦',cx,y+W*.02);ctx.letterSpacing='0';y+=W*.04;
+  drawGLine(ctx,cx,y,W*.38,theme.gold,2);y+=W*.03;
+  const photoR=W*.155;const photoY=y+photoR+W*.02;
+  drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,8);
+  if(v.ornament){for(let i=0;i<8;i++){const a=(i/8)*Math.PI*2;drawStar(ctx,cx+Math.cos(a)*(photoR+W*.05),photoY+Math.sin(a)*(photoR+W*.05),W*.015,theme.gold2,.6);}}
+  const ap=photoY+photoR;
+  ctx.font=`italic ${W*.06}px 'Great Vibes',cursive`;ctx.fillStyle=theme.gold2;ctx.textAlign='center';ctx.fillText(v.nama,cx,ap+W*.075);
+  if(v.showInfo){
+    ctx.font=`${W*.021}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.acc2,.9);ctx.textAlign='center';ctx.fillText(v.institusi,cx,ap+W*.108);
+    ctx.font=`${W*.018}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText(v.fakultas,cx,ap+W*.132);
+    ctx.font=`${W*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.85);ctx.textAlign='center';ctx.fillText(v.jenjang,cx,ap+W*.155);
+  }
+  ctx.font=`700 ${W*.026}px 'Cinzel',serif`;ctx.fillStyle=theme.gold;ctx.textAlign='center';ctx.fillText(v.tahun,cx,ap+W*.185);
+  drawGLine(ctx,cx,ap+W*.205,W*.35,theme.gold,1.5);
+  ctx.font=`${W*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.ink,.7);ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,ap+W*.235,W*.72,W*.032);
+  ctx.font=`italic ${W*.019}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText('— '+v.dari+' —',cx,ap+W*.235+ph+W*.02);
+  if(v.showSocial&&v.social){ctx.font=`${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.6);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.962);}
+}
+
+// ── T1: BINTANG KEJORA ──
+function renderT1(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);const cx=W/2;theme_current=theme;
+  if(v.ornament){// Star burst
+    for(let i=0;i<60;i++){const x=Math.random()*W,y=Math.random()*H;ctx.save();ctx.globalAlpha=Math.random()*.5+.1;ctx.fillStyle=i%3===0?theme.gold2:theme.acc2;ctx.beginPath();ctx.arc(x,y,Math.random()*2.5+.5,0,Math.PI*2);ctx.fill();ctx.restore();}
+    // Large decorative stars
+    [[W*.08,H*.1],[W*.92,H*.1],[W*.08,H*.9],[W*.92,H*.9],[cx,H*.04]].forEach(([x,y])=>drawStar(ctx,x,y,W*.03,rgba(theme.gold,.5)));
+  }
+  if(v.border){ctx.strokeStyle=theme.gold;ctx.lineWidth=2.5;ctx.strokeRect(W*.04,H*.04,W*.92,H*.92);ctx.strokeStyle=rgba(theme.gold,.3);ctx.lineWidth=.8;ctx.strokeRect(W*.055,H*.055,W*.89,H*.89);}
+  let y=H*.07;
+  if(v.showLogo&&logo){ctx.drawImage(logo,cx-W*.045,y,W*.09,W*.09);y+=W*.115;}
+  // Starburst glow
+  if(v.ornament){for(let i=0;i<24;i++){const a=i*Math.PI/12;ctx.save();ctx.globalAlpha=.08;ctx.strokeStyle=theme.gold2;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(cx,y+W*.04);ctx.lineTo(cx+Math.cos(a)*W*.22,y+W*.04+Math.sin(a)*W*.22);ctx.stroke();ctx.restore();}}
+  ctx.font=`italic ${W*.05}px 'Playfair Display',serif`;ctx.fillStyle=theme.gold2;ctx.textAlign='center';ctx.fillText(v.judul,cx,y+W*.055);y+=W*.068;
+  ctx.font=`italic ${W*.022}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText(v.sub,cx,y+W*.012);y+=W*.04;
+  drawGLine(ctx,cx,y,W*.38,theme.gold,2);y+=W*.03;
+  const photoR=W*.15;const photoY=y+photoR+W*.02;
+  drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,8);
+  const ap=photoY+photoR;
+  ctx.font=`italic ${W*.062}px 'Great Vibes',cursive`;ctx.fillStyle=theme.ink;ctx.textAlign='center';ctx.fillText(v.nama,cx,ap+W*.078);
+  if(v.showInfo){ctx.font=`${W*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.acc2,.9);ctx.textAlign='center';ctx.fillText(v.institusi,cx,ap+W*.108);ctx.font=`${W*.018}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText(v.fakultas+' | '+v.jenjang,cx,ap+W*.133);}
+  ctx.font=`700 ${W*.03}px 'Oswald',sans-serif`;ctx.fillStyle=theme.gold;ctx.textAlign='center';ctx.fillText('CLASS OF '+v.tahun,cx,ap+W*.168);
+  drawGLine(ctx,cx,ap+W*.188,W*.32,theme.gold);
+  ctx.font=`${W*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.ink,.7);ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,ap+W*.218,W*.72,W*.032);
+  ctx.font=`italic ${W*.019}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText('— '+v.dari+' —',cx,ap+W*.218+ph+W*.02);
+  if(v.showSocial&&v.social){ctx.font=`${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.6);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.962);}
+}
+
+// ── T2: MODERN BOLD ──
+function renderT2(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);theme_current=theme;
+  // Bold accent bar left
+  ctx.fillStyle=theme.acc;ctx.fillRect(0,0,W*.07,H);
+  ctx.fillStyle=theme.gold;ctx.fillRect(W*.07,0,W,H*.007);
+  // Ghost text
+  ctx.font=`900 ${W*.4}px 'Oswald',sans-serif`;ctx.fillStyle=rgba(theme.acc,.06);ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText('2024',W*.1,H*.5);ctx.textBaseline='alphabetic';
+  const lx=W*.1;
+  if(v.showLogo&&logo){ctx.drawImage(logo,lx,H*.06,W*.08,W*.08);}
+  if(v.ornament){drawToga(ctx,W*.8,H*.2,W*.09,theme.gold,.5);if(v.ornament)drawConfetti(ctx,W*.55,0,W*.5,H*.3,[theme.gold2,theme.acc2,rgba(theme.acc,.7)]);}
+  ctx.font=`900 ${W*.052}px 'Oswald',sans-serif`;ctx.fillStyle=theme.gold2;ctx.textAlign='left';ctx.fillText(v.judul.toUpperCase(),lx,H*.2);
+  ctx.font=`${W*.022}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='left';ctx.fillText(v.sub,lx,H*.24);
+  ctx.fillStyle=rgba(theme.gold,.4);ctx.fillRect(lx,H*.26,W*.5,2);
+  const photoR=W*.125;const photoX=lx+photoR,photoY=H*.4;
+  drawCirclePhoto(ctx,photo,photoX,photoY,photoR,theme.gold,7);
+  const nx=photoX+photoR+W*.05;
+  ctx.font=`italic ${W*.048}px 'Great Vibes',cursive`;ctx.fillStyle=theme.ink;ctx.textAlign='left';ctx.fillText(v.nama,nx,photoY-H*.03);
+  if(v.showInfo){ctx.font=`${W*.018}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.acc2,.9);ctx.textAlign='left';ctx.fillText(v.institusi,nx,photoY+H*.015);ctx.font=`${W*.016}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='left';ctx.fillText(v.fakultas,nx,photoY+H*.04);ctx.font=`${W*.015}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.85);ctx.textAlign='left';ctx.fillText(v.jenjang+' — '+v.tahun,nx,photoY+H*.065);}
+  ctx.fillStyle=rgba(theme.gold,.35);ctx.fillRect(lx,photoY+photoR+H*.03,W-.15*W,1);
+  ctx.font=`${W*.019}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.ink,.7);ctx.textAlign='left';
+  const lines=wrapLines(ctx,v.pesan,W*.78);lines.forEach((l,i)=>ctx.fillText(l,lx,photoY+photoR+H*.065+i*W*.03));
+  ctx.font=`italic ${W*.018}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='left';ctx.fillText('— '+v.dari,lx,H*.9);
+  if(v.showSocial&&v.social){ctx.font=`${W*.015}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.6);ctx.textAlign='left';ctx.fillText(v.social,lx,H*.95);}
+}
+
+// ── T3: KLASIK KAMPUS ──
+function renderT3(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);const cx=W/2;theme_current=theme;
+  // Top accent bar with institution colors
+  ctx.fillStyle=theme.acc;ctx.fillRect(0,0,W,H*.1);
+  if(v.ornament){[[W*.1,H*.05],[W*.9,H*.05],[W*.5,H*.02]].forEach(([x,y])=>drawStar(ctx,x,y,W*.025,rgba(theme.gold,1)));}
+  ctx.font=`700 ${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.ink,.9);ctx.textAlign='center';ctx.letterSpacing='0.2em';ctx.fillText(v.institusi.toUpperCase(),cx,H*.065);ctx.letterSpacing='0';
+  if(v.border){ctx.strokeStyle=theme.gold;ctx.lineWidth=2;ctx.strokeRect(W*.04,H*.12,W*.92,H*.84);ctx.strokeStyle=rgba(theme.gold,.3);ctx.lineWidth=.8;ctx.strokeRect(W*.055,H*.135,W*.89,H*.81);}
+  let y=H*.15;
+  if(v.showLogo&&logo){ctx.drawImage(logo,cx-W*.05,y,W*.1,W*.1);y+=W*.125;}
+  if(v.ornament)drawScroll(ctx,cx,y+W*.04,W*.55,W*.06,theme.gold2,.8);
+  ctx.font=`italic bold ${W*.048}px 'Playfair Display',serif`;ctx.fillStyle=theme.gold2;ctx.textAlign='center';ctx.fillText(v.judul,cx,y+W*.06);y+=W*.08;
+  ctx.font=`${W*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText(v.sub,cx,y+W*.01);y+=W*.038;
+  drawGLine(ctx,cx,y,W*.38,theme.gold,2);y+=W*.03;
+  const photoR=W*.135;const photoY=y+photoR+W*.02;
+  drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,8);
+  const ap=photoY+photoR;
+  ctx.font=`italic ${W*.06}px 'Great Vibes',cursive`;ctx.fillStyle=theme.ink;ctx.textAlign='center';ctx.fillText(v.nama,cx,ap+W*.075);
+  if(v.showInfo){ctx.font=`${W*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.9);ctx.textAlign='center';ctx.fillText(v.fakultas,cx,ap+W*.105);ctx.font=`${W*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.85);ctx.textAlign='center';ctx.fillText(v.jenjang,cx,ap+W*.128);}
+  ctx.font=`700 ${W*.025}px 'Cinzel',serif`;ctx.fillStyle=theme.gold;ctx.textAlign='center';ctx.fillText('WISUDA '+v.tahun,cx,ap+W*.158);
+  drawGLine(ctx,cx,ap+W*.178,W*.35,theme.gold);
+  ctx.font=`${W*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.ink,.7);ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,ap+W*.208,W*.72,W*.032);
+  ctx.font=`italic ${W*.018}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText('— '+v.dari+' —',cx,ap+W*.208+ph+W*.02);
+  if(v.showSocial&&v.social){ctx.font=`${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.6);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.962);}
+}
+
+// ── T4: KONFETI CERIA ──
+function renderT4(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);const cx=W/2;theme_current=theme;
+  if(v.ornament){const confColors=[theme.gold2,theme.acc2,rgba(theme.acc,.8),'#f472b6','#34d399','#60a5fa'];drawConfetti(ctx,W,H,confColors);}
+  if(v.border){ctx.strokeStyle=theme.gold;ctx.lineWidth=2;ctx.strokeRect(W*.04,H*.04,W*.92,H*.92);}
+  // Celebratory banner
+  const bh=H*.11;const bg=ctx.createLinearGradient(0,0,W,bh);bg.addColorStop(0,rgba(theme.acc,.9));bg.addColorStop(1,rgba(theme.acc,.7));ctx.fillStyle=bg;ctx.fillRect(0,0,W,bh);
+  ctx.font=`900 ${W*.036}px 'Oswald',sans-serif`;ctx.fillStyle=rgba(theme.ink,.95);ctx.textAlign='center';ctx.fillText('🎓 '+v.judul.toUpperCase()+' 🎓',cx,bh*.65);
+  let y=bh+W*.04;
+  if(v.showLogo&&logo){ctx.drawImage(logo,cx-W*.04,y,W*.08,W*.08);y+=W*.1;}
+  const photoR=W*.145;const photoY=y+photoR+W*.02;
+  // Glow ring
+  const pg=ctx.createRadialGradient(cx,photoY,photoR*.5,cx,photoY,photoR*2);pg.addColorStop(0,rgba(theme.gold,.2));pg.addColorStop(1,'transparent');ctx.fillStyle=pg;ctx.beginPath();ctx.arc(cx,photoY,photoR*2,0,Math.PI*2);ctx.fill();
+  drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,8);
+  if(v.ornament)for(let i=0;i<12;i++){const a=(i/12)*Math.PI*2;drawStar(ctx,cx+Math.cos(a)*(photoR+W*.055),photoY+Math.sin(a)*(photoR+W*.055),W*.016,theme.gold2,.6);}
+  const ap=photoY+photoR;
+  ctx.font=`italic ${W*.062}px 'Great Vibes',cursive`;ctx.fillStyle=theme.ink;ctx.textAlign='center';ctx.fillText(v.nama,cx,ap+W*.078);
+  if(v.showInfo){ctx.font=`${W*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.acc2,.9);ctx.textAlign='center';ctx.fillText(v.institusi,cx,ap+W*.108);ctx.font=`${W*.018}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText(v.fakultas+' — '+v.jenjang,cx,ap+W*.132);}
+  ctx.font=`700 ${W*.028}px 'Cinzel',serif`;ctx.fillStyle=theme.gold;ctx.textAlign='center';ctx.fillText('✦  '+v.tahun+'  ✦',cx,ap+W*.165);
+  drawGLine(ctx,cx,ap+W*.185,W*.35,theme.gold,2);
+  ctx.font=`${W*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.ink,.7);ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,ap+W*.215,W*.72,W*.032);
+  ctx.font=`italic ${W*.018}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText('— '+v.dari+' —',cx,ap+W*.215+ph+W*.02);
+  if(v.showSocial&&v.social){ctx.font=`${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.6);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.962);}
+}
+
+// ── T5: MINIMALIS PRO ──
+function renderT5(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);const cx=W/2;theme_current=theme;
+  ctx.fillStyle=theme.gold;ctx.fillRect(0,0,W,H*.006);ctx.fillRect(0,H-H*.006,W,H*.006);
+  if(v.border){ctx.strokeStyle=rgba(theme.gold,.35);ctx.lineWidth=1;ctx.strokeRect(W*.05,H*.04,W*.9,H*.92);}
+  if(v.ornament)for(let i=0;i<25;i++){const x=Math.random()*W,y=Math.random()*H;ctx.save();ctx.globalAlpha=Math.random()*.3+.05;ctx.fillStyle=theme.gold2;ctx.beginPath();ctx.arc(x,y,Math.random()*2+.5,0,Math.PI*2);ctx.fill();ctx.restore();}
+  let y=H*.08;
+  if(v.showLogo&&logo){ctx.drawImage(logo,cx-W*.04,y,W*.08,W*.08);y+=W*.1;}
+  ctx.font=`${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.75);ctx.textAlign='center';ctx.letterSpacing='0.25em';ctx.fillText(v.judul.toUpperCase(),cx,y+W*.018);ctx.letterSpacing='0';y+=W*.038;
+  drawGLine(ctx,cx,y,W*.18,theme.gold,2);y+=W*.032;
+  const photoR=W*.16;const photoY=y+photoR+W*.015;
+  drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,7);
+  const ap=photoY+photoR;
+  ctx.font=`italic ${W*.065}px 'Great Vibes',cursive`;ctx.fillStyle=theme.gold2;ctx.textAlign='center';ctx.fillText(v.nama,cx,ap+W*.082);
+  if(v.showInfo){ctx.font=`${W*.021}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.acc2,.9);ctx.textAlign='center';ctx.fillText(v.institusi,cx,ap+W*.112);ctx.font=`${W*.018}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText(v.fakultas,cx,ap+W*.135);ctx.font=`${W*.017}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.85);ctx.textAlign='center';ctx.fillText(v.jenjang+' — '+v.tahun,cx,ap+W*.158);}
+  drawGLine(ctx,cx,ap+W*.178,W*.3,theme.gold);
+  ctx.font=`italic ${W*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.8);ctx.textAlign='center';ctx.fillText('"'+v.sub+'"',cx,ap+W*.21);
+  ctx.font=`${W*.019}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.ink,.68);ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,ap+W*.245,W*.72,W*.032);
+  ctx.font=`italic ${W*.018}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.75);ctx.textAlign='center';ctx.fillText('— '+v.dari+' —',cx,ap+W*.245+ph+W*.018);
+  if(v.showSocial&&v.social){ctx.font=`${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.6);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.962);}
+}
+
+const RENDERERS=[renderT0,renderT1,renderT2,renderT3,renderT4,renderT5];
+function setMode(m){
+  S.mode=m;
+  document.getElementById('modeWisuda').classList.toggle('active',m==='wisuda');
+  document.getElementById('modeLulus').classList.toggle('active',m==='lulus');
+  if(m==='wisuda'){document.getElementById('fJudul').value='Selamat Wisuda';document.getElementById('fSub').value='Semoga ilmu yang diraih membawa keberkahan';document.getElementById('labelInstitusi').textContent='Universitas / Kampus';document.getElementById('labelFakultas').textContent='Fakultas / Jurusan';document.getElementById('labelJenjang').textContent='Jenjang / Predikat';}
+  else{document.getElementById('fJudul').value='Selamat Lulus!';document.getElementById('fSub').value='Kerja keras membuahkan hasil yang manis';document.getElementById('labelInstitusi').textContent='Sekolah / Institusi';document.getElementById('labelFakultas').textContent='Jurusan / Program';document.getElementById('labelJenjang').textContent='Predikat / Nilai';}
+  doRender();
+}
+function doRenderToCanvas(cv){cv.width=S.cw;cv.height=S.ch;const ctx=cv.getContext('2d');theme_current=THEMES[S.theme];(RENDERERS[S.template]||renderT0)(ctx,S.cw,S.ch,THEMES[S.theme],getVals(),S.photoImg,S.logoImg);}
+function doRender(){doRenderToCanvas(document.getElementById('mainCanvas'));renderAllMini();}
+function doDownload(){const cv=document.getElementById('renderCanvas');doRenderToCanvas(cv);const a=document.createElement('a');a.download=`${S.mode}-${Date.now()}.png`;a.href=cv.toDataURL('image/png',1);a.click();}
+document.getElementById('mainCanvas').onclick=doDownload;
+function renderMini(cv,tid){const W=90,H=120;cv.width=W;cv.height=H;const ctx=cv.getContext('2d');const t=THEMES[S.theme];const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,t.bg2);g.addColorStop(1,t.bg);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  if(tid===2){ctx.fillStyle=t.acc;ctx.fillRect(0,0,W*.08,H);}else if(tid===3){ctx.fillStyle=t.acc;ctx.fillRect(0,0,W,H*.12);}else if(tid===4){const bg=ctx.createLinearGradient(0,0,W,H*.12);bg.addColorStop(0,rgba(t.acc,.9));bg.addColorStop(1,rgba(t.acc,.7));ctx.fillStyle=bg;ctx.fillRect(0,0,W,H*.12);}
+  if(tid!==2)ctx.strokeStyle=t.gold;ctx.lineWidth=1.5;ctx.strokeRect(3,3,W-6,H-6);
+  ctx.font=`${W*.12}px serif`;ctx.fillStyle=rgba(t.gold,.7);ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎓',W*.7,H*.2);ctx.textBaseline='alphabetic';
+  ctx.beginPath();ctx.arc(W/2,H*.48,W*.16,0,Math.PI*2);ctx.strokeStyle=t.gold;ctx.lineWidth=2;ctx.stroke();ctx.fillStyle=rgba(t.acc,.1);ctx.fill();ctx.font=`${W*.12}px serif`;ctx.fillStyle=rgba('#fff',.2);ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎓',W/2,H*.48);ctx.textBaseline='alphabetic';
+  ctx.font=`italic ${H*.1}px 'Great Vibes',cursive`;ctx.fillStyle=rgba(t.gold2,.85);ctx.textAlign='center';ctx.fillText('Wisuda',W/2,H*.72);
+  ctx.font=`${H*.08}px serif`;ctx.fillStyle=rgba(t.ink,.6);ctx.textAlign='center';ctx.fillText('Nama Lulusan',W/2,H*.87);}
+function renderAllMini(){document.querySelectorAll('.tmpl-item canvas').forEach((cv,i)=>renderMini(cv,i));}
+function initTemplates(){const grid=document.getElementById('tmplGrid');TMPL_NAMES.forEach((n,i)=>{const item=document.createElement('div');item.className='tmpl-item'+(i===0?' active':'');const cv=document.createElement('canvas');const lbl=document.createElement('div');lbl.className='lbl';lbl.textContent=n;item.appendChild(cv);item.appendChild(lbl);item.onclick=()=>{document.querySelectorAll('.tmpl-item').forEach(x=>x.classList.remove('active'));item.classList.add('active');S.template=i;doRender();};grid.appendChild(item);});}
+function initColors(){const row=document.getElementById('colorRow');THEMES.forEach((t,i)=>{const d=document.createElement('div');d.className='cdot'+(i===0?' active':'');d.style.background=`linear-gradient(135deg,${t.bg} 40%,${t.acc} 100%)`;d.style.borderColor=t.acc;d.title=t.name;d.onclick=()=>{document.querySelectorAll('.cdot').forEach(x=>x.classList.remove('active'));d.classList.add('active');S.theme=i;doRender();};row.appendChild(d);});}
+function initSizes(){document.querySelectorAll('.size-pill').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.size-pill').forEach(x=>x.classList.remove('active'));btn.classList.add('active');S.cw=+btn.dataset.w;S.ch=+btn.dataset.h;doRender();};});}
+function initLive(){['fNama','fInstitusi','fFakultas','fJenjang','fTahun','fDari','fJudul','fSub','fPesan','fSocial'].forEach(id=>document.getElementById(id).addEventListener('input',doRender));['tOrnament','tBorder','tLogo','tInfo','tSocial'].forEach(id=>document.getElementById(id).addEventListener('change',doRender));}
+['photoInput','logoInput'].forEach((id,ki)=>{document.getElementById(id).onchange=function(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=()=>{S[ki===0?'photoImg':'logoImg']=img;document.getElementById(ki===0?'photoThumb':'logoThumb').src=ev.target.result;document.getElementById(ki===0?'photoThumb':'logoThumb').style.display='block';doRender();};img.src=ev.target.result;};r.readAsDataURL(f);};});
+initTemplates();initColors();initSizes();initLive();
+document.fonts.ready.then(()=>{renderAllMini();doRender();});setTimeout(()=>{renderAllMini();doRender();},600);
+</script>
+</body>
+</html>
