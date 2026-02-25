@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kartu Ucapan Selamat Idul Fitri — Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1a0e;--panel:#111f12;--border:rgba(180,220,100,.15);
+  --gold:#c9a96e;--gold2:#e8d5a3;--ash:#7a8268;--smoke:#c9d5b9;
+  --text:#f0ebe0;--accent:#7ec850;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse at 5% 0%,rgba(30,80,20,.5) 0%,transparent 50%),
+    radial-gradient(ellipse at 95% 100%,rgba(20,60,10,.4) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 50%,rgba(10,40,5,.3) 0%,transparent 80%);
+  color:var(--text);font-family:'EB Garamond',serif;min-height:100vh;
+}
+
+/* ─── HEADER ─── */
+.site-header{
+  text-align:center;padding:2rem 1rem 1.5rem;
+  border-bottom:1px solid var(--border);
+  background:rgba(0,0,0,.35);backdrop-filter:blur(8px);
+  position:sticky;top:0;z-index:100;
+}
+.site-header .tagline{
+  font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.3em;
+  color:var(--accent);display:block;margin-bottom:.3rem;
+}
+.site-header h1{
+  font-family:'Cinzel',serif;font-size:clamp(1.1rem,3vw,1.8rem);
+  font-weight:400;color:var(--gold2);letter-spacing:.08em;
+}
+.site-header h1 em{color:var(--accent);font-style:normal;}
+
+/* ─── LAYOUT ─── */
+.workspace{display:flex;min-height:calc(100vh - 78px);}
+
+/* ─── SIDEBAR ─── */
+.sidebar{
+  width:320px;min-width:280px;max-width:320px;
+  background:var(--panel);border-right:1px solid var(--border);
+  padding:1.5rem;overflow-y:auto;max-height:calc(100vh - 78px);
+  position:sticky;top:78px;
+}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(126,200,80,.3);border-radius:4px;}
+
+.s-section{margin-bottom:1.4rem;}
+.s-title{
+  font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.22em;
+  color:var(--accent);text-transform:uppercase;
+  display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem;
+}
+.s-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.field{margin-bottom:.85rem;}
+.field label{display:block;font-size:.82rem;color:var(--smoke);margin-bottom:.3rem;}
+.field input,.field textarea,.field select{
+  width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);
+  color:var(--text);font-family:'EB Garamond',serif;font-size:.95rem;
+  padding:.55rem .8rem;border-radius:3px;outline:none;transition:border-color .25s;
+}
+.field input:focus,.field textarea:focus{border-color:rgba(126,200,80,.5);}
+.field textarea{resize:vertical;min-height:80px;line-height:1.55;}
+
+/* Upload */
+.upload-zone{
+  border:2px dashed rgba(126,200,80,.3);border-radius:6px;
+  padding:1.1rem;text-align:center;cursor:pointer;
+  transition:all .3s;position:relative;
+}
+.upload-zone:hover{border-color:var(--accent);background:rgba(126,200,80,.06);}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-zone .icon{font-size:1.6rem;margin-bottom:.35rem;}
+.upload-zone p{font-size:.78rem;color:var(--ash);}
+.upload-zone p strong{color:var(--accent);display:block;font-size:.82rem;}
+.thumb-preview{
+  width:66px;height:66px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--accent);margin:.6rem auto 0;display:none;
+}
+
+/* Template grid */
+.tmpl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.45rem;}
+.tmpl-item{
+  border:2px solid var(--border);border-radius:4px;cursor:pointer;
+  overflow:hidden;aspect-ratio:3/4;background:#0a140b;
+  transition:border-color .25s,transform .2s;position:relative;
+}
+.tmpl-item:hover{border-color:rgba(126,200,80,.6);transform:scale(1.04);}
+.tmpl-item.active{border-color:var(--accent);}
+.tmpl-item canvas{width:100%;height:100%;display:block;}
+.tmpl-item .lbl{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,.75);font-family:'Cinzel',serif;
+  font-size:.4rem;letter-spacing:.06em;color:var(--gold2);
+  text-align:center;padding:2px 0;line-height:1.4;
+}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
+.toggle-row>span{font-size:.82rem;color:var(--smoke);}
+.sw{position:relative;width:38px;height:20px;cursor:pointer;}
+.sw input{display:none;}
+.sw-track{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:20px;border:1px solid var(--border);transition:background .3s;}
+.sw-track::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:var(--ash);border-radius:50%;transition:transform .3s,background .3s;}
+.sw input:checked+.sw-track{background:rgba(126,200,80,.2);}
+.sw input:checked+.sw-track::after{transform:translateX(18px);background:var(--accent);}
+
+/* Color */
+.color-row{display:flex;gap:.4rem;flex-wrap:wrap;}
+.cdot{
+  width:26px;height:26px;border-radius:50%;cursor:pointer;
+  border:2px solid transparent;transition:border-color .2s,transform .2s;
+}
+.cdot:hover,.cdot.active{border-color:var(--gold);transform:scale(1.2);}
+
+/* Size pills */
+.size-pills{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;}
+.size-pill{
+  padding:.3rem .75rem;border:1px solid var(--border);border-radius:20px;
+  font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.08em;
+  color:var(--smoke);cursor:pointer;transition:all .25s;background:none;
+}
+.size-pill:hover,.size-pill.active{border-color:var(--accent);color:var(--accent);background:rgba(126,200,80,.08);}
+
+/* Buttons */
+.btn-dl{
+  width:100%;padding:.8rem;margin-top:.5rem;
+  background:linear-gradient(135deg,#2d6b10,#7ec850,#2d6b10);
+  background-size:200%;border:none;color:#0a1f05;
+  font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.15em;
+  cursor:pointer;border-radius:3px;transition:background-position .4s,transform .2s;
+}
+.btn-dl:hover{background-position:100%;transform:translateY(-1px);}
+.btn-ref{
+  width:100%;padding:.7rem;margin-top:.4rem;
+  background:transparent;border:1px solid rgba(126,200,80,.35);
+  color:#9ee870;font-family:'Cinzel',serif;font-size:.7rem;
+  letter-spacing:.12em;cursor:pointer;border-radius:3px;transition:all .3s;
+}
+.btn-ref:hover{background:rgba(126,200,80,.1);}
+
+/* ─── MAIN ─── */
+.main-area{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding:2rem 2rem 4rem;gap:1rem;overflow-y:auto;
+}
+.canvas-label{
+  font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.22em;
+  color:var(--ash);text-align:center;
+}
+#mainCanvas{
+  width:min(520px,90vw);
+  box-shadow:0 20px 80px rgba(0,0,0,.8),0 0 0 1px rgba(126,200,80,.15),0 0 60px rgba(30,100,10,.15);
+  border-radius:4px;display:block;cursor:pointer;transition:box-shadow .3s;
+}
+#mainCanvas:hover{box-shadow:0 20px 80px rgba(0,0,0,.8),0 0 0 1px rgba(126,200,80,.5),0 0 80px rgba(30,150,10,.2);}
+.canvas-hint{font-size:.78rem;font-style:italic;color:var(--ash);text-align:center;}
+
+@media(max-width:760px){
+  .workspace{flex-direction:column;}
+  .sidebar{width:100%;max-width:100%;max-height:none;position:static;border-right:none;border-bottom:1px solid var(--border);}
+  .tmpl-grid{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <span class="tagline">🌙 SPESIAL IDUL FITRI 🌙</span>
+  <h1>Kartu Ucapan <em>Selamat Idul Fitri</em></h1>
+</div>
+
+<div class="workspace">
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+
+  <div class="s-section">
+    <div class="s-title">Foto Profil</div>
+    <div class="upload-zone">
+      <input type="file" accept="image/*" id="photoInput">
+      <div class="icon">🖼️</div>
+      <p><strong>Upload Foto</strong>JPG, PNG, WEBP</p>
+    </div>
+    <img id="photoThumb" class="thumb-preview">
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Logo / Ikon</div>
+    <div class="upload-zone">
+      <input type="file" accept="image/*" id="logoInput">
+      <div class="icon">🏛️</div>
+      <p><strong>Upload Logo (opsional)</strong>PNG transparan</p>
+    </div>
+    <img id="logoThumb" class="thumb-preview">
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Pilih Template</div>
+    <div class="tmpl-grid" id="tmplGrid"></div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Ukuran / Rasio</div>
+    <div class="size-pills">
+      <button class="size-pill active" data-w="1080" data-h="1080">1:1 Post</button>
+      <button class="size-pill" data-w="1080" data-h="1920">9:16 Story</button>
+      <button class="size-pill" data-w="1080" data-h="1350">4:5 Feed</button>
+      <button class="size-pill" data-w="1200" data-h="628">FB Cover</button>
+    </div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Informasi Pengirim</div>
+    <div class="field"><label>Nama / Keluarga</label>
+      <input type="text" id="fName" value="Ahmad & Siti Rahayu"></div>
+    <div class="field"><label>Jabatan / Keterangan</label>
+      <input type="text" id="fRole" value="Beserta Seluruh Keluarga"></div>
+    <div class="field"><label>Instansi / Organisasi</label>
+      <input type="text" id="fFrom" value="Keluarga Besar PT. Nusantara Jaya"></div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Teks Kartu</div>
+    <div class="field"><label>Tahun Hijriah / Masehi</label>
+      <input type="text" id="fYear" value="1446 H / 2025 M"></div>
+    <div class="field"><label>Kalimat Arab (opsional)</label>
+      <input type="text" id="fAyat" value="تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُم"></div>
+    <div class="field"><label>Teks Ucapan Utama</label>
+      <input type="text" id="fUcapan" value="Selamat Hari Raya Idul Fitri"></div>
+    <div class="field"><label>Moto / Tagline</label>
+      <input type="text" id="fMoto" value="Minal 'Aidin wal Faizin"></div>
+    <div class="field"><label>Pesan / Doa</label>
+      <textarea id="fPesan">Mohon maaf lahir dan batin. Semoga amal ibadah kita diterima Allah SWT dan kita senantiasa diberikan keberkahan di hari yang fitri ini.</textarea></div>
+    <div class="field"><label>Handle Sosmed / Website</label>
+      <input type="text" id="fSocial" value="@nusantarajaya.id"></div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Warna Tema</div>
+    <div class="color-row" id="colorRow"></div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Elemen</div>
+    <div class="toggle-row"><span>Ornamen Islami</span>
+      <label class="sw"><input type="checkbox" id="tOrnament" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Bingkai / Border</span>
+      <label class="sw"><input type="checkbox" id="tBorder" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Bulan &amp; Bintang</span>
+      <label class="sw"><input type="checkbox" id="tMoon" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Teks Arab</span>
+      <label class="sw"><input type="checkbox" id="tAyat" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Logo / Ikon</span>
+      <label class="sw"><input type="checkbox" id="tLogo" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Foto Profil</span>
+      <label class="sw"><input type="checkbox" id="tPhoto" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Jabatan / Keterangan</span>
+      <label class="sw"><input type="checkbox" id="tRole" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Akun Sosmed</span>
+      <label class="sw"><input type="checkbox" id="tSocial" checked><span class="sw-track"></span></label></div>
+  </div>
+
+  <button class="btn-dl" onclick="doDownload()">⬇ UNDUH KARTU PNG</button>
+  <button class="btn-ref" onclick="doRender()">↻ PERBARUI PRATINJAU</button>
+
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main-area">
+  <div class="canvas-label">✦ PRATINJAU KARTU ✦</div>
+  <canvas id="mainCanvas" width="1080" height="1080"></canvas>
+  <p class="canvas-hint">Klik kartu untuk mengunduh · Resolusi tinggi siap cetak &amp; share</p>
+</main>
+</div>
+
+<canvas id="renderCanvas" width="1080" height="1080" style="display:none"></canvas>
+
+<script>
+// ════════════════════════════════════════════════
+// STATE & CONFIG
+// ════════════════════════════════════════════════
+const S = { template:0, theme:0, photoImg:null, logoImg:null, cw:1080, ch:1080 };
+
+const THEMES = [
+  { name:'Hijau Emas',    bg:'#0a1f08',  bg2:'#142b10',  accent:'#7ec850', accent2:'#b8f078', gold:'#c9a96e', gold2:'#e8d5a3', text:'#f0ede0', sub:'#a8c890' },
+  { name:'Emas Mewah',   bg:'#1a1205',  bg2:'#2a1e08',  accent:'#e8b830', accent2:'#f8d870', gold:'#c9a030', gold2:'#f0cc60', text:'#fff8e8', sub:'#c8a860' },
+  { name:'Hijau Tosca',  bg:'#051a18',  bg2:'#082a25',  accent:'#40c8a8', accent2:'#80f0d8', gold:'#c9a96e', gold2:'#e8d5a3', text:'#e8f8f5', sub:'#60b898' },
+  { name:'Biru Malam',   bg:'#050e20',  bg2:'#0a1530',  accent:'#60a8f8', accent2:'#a8d0ff', gold:'#c9a96e', gold2:'#e8d5a3', text:'#e8f0ff', sub:'#6890c0' },
+  { name:'Ungu Mewah',   bg:'#100818',  bg2:'#1a1025',  accent:'#c878f0', accent2:'#e8a8ff', gold:'#c9a96e', gold2:'#e8d5a3', text:'#f0e8ff', sub:'#9860c0' },
+  { name:'Merah Saga',   bg:'#1a0808',  bg2:'#2a1010',  accent:'#f06050', accent2:'#ff9888', gold:'#c9a96e', gold2:'#e8d5a3', text:'#fff0ee', sub:'#c07060' },
+  { name:'Putih Bersih', bg:'#f5f0e4',  bg2:'#ede5d0',  accent:'#3a7820', accent2:'#5aa030', gold:'#9a6820', gold2:'#c8900c', text:'#181408', sub:'#506040' },
+  { name:'Coklat Hangat',bg:'#1e1408',  bg2:'#2a1c0a',  accent:'#d4944c', accent2:'#f0bc74', gold:'#c9a96e', gold2:'#e8d5a3', text:'#f8ede0', sub:'#b07840' },
+];
+
+const TEMPLATE_NAMES = [
+  'Masjid Emas','Bulan Bintang','Geometri Islam','Ketupat Mewah',
+  'Lantera Malam','Minimalis Fitri','Batik Nusantara','Klasik Simetri'
+];
+
+// ════════════════════════════════════════════════
+// DRAW HELPERS
+// ════════════════════════════════════════════════
+function rgba(hex,a){ const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16); return `rgba(${r},${g},${b},${a})`; }
+
+function wrapLines(ctx,text,maxW){
+  const words=text.split(' ');const lines=[];let cur='';
+  words.forEach(w=>{ const t=cur?cur+' '+w:w; if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}else cur=t; });
+  if(cur)lines.push(cur);return lines;
+}
+function fillTextWrapped(ctx,text,x,y,maxW,lh,align='center'){
+  const saved=ctx.textAlign;ctx.textAlign=align;
+  const lines=wrapLines(ctx,text,maxW);
+  lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lh));
+  ctx.textAlign=saved;return lines.length*lh;
+}
+
+function drawGLine(ctx,cx,y,hw,color,lw=1.5){
+  const g=ctx.createLinearGradient(cx-hw,y,cx+hw,y);
+  g.addColorStop(0,'transparent');g.addColorStop(.35,color);
+  g.addColorStop(.65,color);g.addColorStop(1,'transparent');
+  ctx.save();ctx.strokeStyle=g;ctx.lineWidth=lw;
+  ctx.beginPath();ctx.moveTo(cx-hw,y);ctx.lineTo(cx+hw,y);ctx.stroke();ctx.restore();
+}
+
+function drawVignette(ctx,W,H,strength=.7){
+  const vg=ctx.createRadialGradient(W/2,H/2,H*.08,W/2,H/2,H*.75);
+  vg.addColorStop(0,'transparent');vg.addColorStop(1,`rgba(0,0,0,${strength})`);
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+}
+
+function drawNoise(ctx,W,H,alpha=8){
+  const id=ctx.createImageData(W,H);
+  for(let i=0;i<id.data.length;i+=4){const v=Math.random()*255;id.data[i]=v;id.data[i+1]=v;id.data[i+2]=v;id.data[i+3]=alpha;}
+  ctx.putImageData(id,0,0);
+}
+
+function drawBg(ctx,W,H,theme){
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,theme.bg2);g.addColorStop(.5,theme.bg);g.addColorStop(1,theme.bg2);
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // ambient glows
+  const g1=ctx.createRadialGradient(W*.2,H*.2,0,W*.2,H*.2,W*.5);
+  g1.addColorStop(0,rgba(theme.accent,.12));g1.addColorStop(1,'transparent');
+  ctx.fillStyle=g1;ctx.fillRect(0,0,W,H);
+  const g2=ctx.createRadialGradient(W*.8,H*.8,0,W*.8,H*.8,W*.5);
+  g2.addColorStop(0,rgba(theme.gold,.08));g2.addColorStop(1,'transparent');
+  ctx.fillStyle=g2;ctx.fillRect(0,0,W,H);
+  drawNoise(ctx,W,H);
+  drawVignette(ctx,W,H,.55);
+}
+
+// ── Crescent Moon ──
+function drawCrescent(ctx,cx,cy,r,color,alpha=1){
+  ctx.save();ctx.globalAlpha*=alpha;
+  ctx.fillStyle=color;
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=ctx.fillStyle; // save
+  // cutout
+  ctx.globalCompositeOperation='destination-out';
+  ctx.beginPath();ctx.arc(cx+r*.35,cy-r*.1,r*.78,0,Math.PI*2);ctx.fill();
+  ctx.globalCompositeOperation='source-over';
+  ctx.restore();
+}
+
+function drawStar5(ctx,cx,cy,r,color,alpha=1){
+  ctx.save();ctx.globalAlpha*=alpha;ctx.fillStyle=color;
+  ctx.beginPath();
+  for(let i=0;i<10;i++){
+    const a=i*Math.PI/5-Math.PI/2;
+    const rad=i%2===0?r:r*.42;
+    i===0?ctx.moveTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad):ctx.lineTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad);
+  }
+  ctx.closePath();ctx.fill();ctx.restore();
+}
+
+function drawStarField(ctx,W,H,theme,count=60){
+  for(let i=0;i<count;i++){
+    const x=Math.random()*W,y=Math.random()*H;
+    const s=Math.random()*2.5+.5;
+    const a=Math.random()*.7+.1;
+    ctx.save();ctx.globalAlpha=a;ctx.fillStyle=theme.gold2;
+    ctx.beginPath();ctx.arc(x,y,s,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+}
+
+function drawCirclePhoto(ctx,photo,cx,cy,r,borderColor,borderW=6){
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=25;ctx.shadowOffsetY=8;
+  ctx.beginPath();ctx.arc(cx,cy,r+borderW+3,0,Math.PI*2);
+  ctx.fillStyle=borderColor;ctx.fill();
+  ctx.shadowColor='transparent';
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.clip();
+  if(photo){
+    const iw=photo.width,ih=photo.height;
+    const scale=Math.max(r*2/iw,r*2/ih);
+    ctx.drawImage(photo,cx-iw*scale/2,cy-ih*scale/2,iw*scale,ih*scale);
+  } else {
+    ctx.fillStyle=rgba(borderColor,.15);ctx.fill();
+    ctx.font=`${r*.5}px serif`;ctx.fillStyle=rgba('#ffffff',.25);
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('👤',cx,cy);
+    ctx.textBaseline='alphabetic';
+  }
+  ctx.restore();
+}
+
+// ── Lantern shape ──
+function drawLantern(ctx,cx,cy,w,h,color,alpha=1){
+  ctx.save();ctx.globalAlpha*=alpha;ctx.strokeStyle=color;ctx.lineWidth=2;
+  // body
+  ctx.beginPath();
+  ctx.moveTo(cx-w*.3,cy-h*.5);
+  ctx.bezierCurveTo(cx-w*.55,cy-h*.3,cx-w*.55,cy+h*.3,cx-w*.3,cy+h*.5);
+  ctx.lineTo(cx+w*.3,cy+h*.5);
+  ctx.bezierCurveTo(cx+w*.55,cy+h*.3,cx+w*.55,cy-h*.3,cx+w*.3,cy-h*.5);
+  ctx.closePath();
+  const lg=ctx.createLinearGradient(cx-w*.5,cy,cx+w*.5,cy);
+  lg.addColorStop(0,rgba(color,.3));lg.addColorStop(.5,rgba(color,.6));lg.addColorStop(1,rgba(color,.3));
+  ctx.fillStyle=lg;ctx.fill();ctx.stroke();
+  // top cap
+  ctx.beginPath();ctx.moveTo(cx-w*.25,cy-h*.5);ctx.lineTo(cx+w*.25,cy-h*.5);
+  ctx.lineTo(cx+w*.2,cy-h*.6);ctx.lineTo(cx-w*.2,cy-h*.6);ctx.closePath();
+  ctx.fill();ctx.stroke();
+  // stripes
+  for(let i=1;i<4;i++){
+    const sy=cy-h*.5+h*i*.25;
+    ctx.beginPath();ctx.moveTo(cx-w*.5,sy);ctx.lineTo(cx+w*.5,sy);
+    ctx.strokeStyle=rgba(color,.3);ctx.lineWidth=1;ctx.stroke();
+  }
+  // glow
+  const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,w*.6);
+  glow.addColorStop(0,rgba(color,.25));glow.addColorStop(1,'transparent');
+  ctx.fillStyle=glow;ctx.beginPath();ctx.arc(cx,cy,w*.6,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+
+// ── Ketupat (diamond grid) ──
+function drawKetupat(ctx,cx,cy,size,color,alpha=1){
+  ctx.save();ctx.globalAlpha*=alpha;
+  ctx.strokeStyle=color;ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(cx,cy-size);ctx.lineTo(cx+size*.6,cy);
+  ctx.lineTo(cx,cy+size);ctx.lineTo(cx-size*.6,cy);ctx.closePath();
+  const kg=ctx.createLinearGradient(cx-size,cy-size,cx+size,cy+size);
+  kg.addColorStop(0,rgba(color,.2));kg.addColorStop(.5,rgba(color,.45));kg.addColorStop(1,rgba(color,.2));
+  ctx.fillStyle=kg;ctx.fill();ctx.stroke();
+  // inner grid lines
+  ctx.lineWidth=.8;ctx.strokeStyle=rgba(color,.4);
+  for(let i=1;i<4;i++){
+    const t=i/4;
+    const x1=cx-size*.6+size*.6*t*2,y1=cy-size+size*t;
+    ctx.beginPath();ctx.moveTo(cx-size*.6*(1-t),cy-size*t);ctx.lineTo(cx+size*.6*(1-t),cy-size*t);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-size*.6*(1-t),cy+size*t);ctx.lineTo(cx+size*.6*(1-t),cy+size*t);ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// ── Islamic geometric tile ──
+function drawGeomTile(ctx,cx,cy,size,color,alpha=.3){
+  ctx.save();ctx.globalAlpha*=alpha;ctx.strokeStyle=color;ctx.lineWidth=1.5;
+  // 8-point star outline
+  ctx.beginPath();
+  for(let i=0;i<8;i++){
+    const a=i*Math.PI/4,ra=a+Math.PI/8;
+    const x1=cx+Math.cos(a)*size,y1=cy+Math.sin(a)*size;
+    const x2=cx+Math.cos(ra)*size*.42,y2=cy+Math.sin(ra)*size*.42;
+    i===0?ctx.moveTo(x1,y1):ctx.lineTo(x1,y1);
+    ctx.lineTo(x2,y2);
+  }
+  ctx.closePath();ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,size*.22,0,Math.PI*2);ctx.stroke();
+  ctx.restore();
+}
+
+// ── Mosque silhouette ──
+function drawMosque(ctx,W,H,theme,alpha=1){
+  ctx.save();ctx.globalAlpha*=alpha;
+  const floorY=H;
+  // main dome
+  const dc=W/2,dr=W*.18;
+  const g=ctx.createLinearGradient(dc-dr,floorY-dr*2.5,dc+dr,floorY);
+  g.addColorStop(0,rgba(theme.accent,.7));g.addColorStop(1,rgba(theme.accent,.2));
+  ctx.fillStyle=g;
+  ctx.beginPath();ctx.arc(dc,floorY-H*.18,dr,Math.PI,0);ctx.rect(dc-dr,floorY-H*.18,dr*2,H*.18);ctx.fill();
+  // side minarets
+  [[W*.25,H*.32],[W*.75,H*.32]].forEach(([x,h])=>{
+    ctx.fillStyle=rgba(theme.accent,.5);
+    ctx.fillRect(x-W*.025,floorY-h,W*.05,h);
+    ctx.beginPath();ctx.arc(x,floorY-h,W*.025,Math.PI,0);ctx.fill();
+    // crescent on minaret
+    ctx.save();ctx.globalAlpha*=.9;
+    drawCrescent(ctx,x,floorY-h-W*.04,W*.015,theme.gold2);ctx.restore();
+  });
+  // main crescent
+  drawCrescent(ctx,dc,floorY-H*.18-dr-W*.05,W*.03,theme.gold2,.9);
+  ctx.restore();
+}
+
+// ── Batik pattern tile ──
+function drawBatikTile(ctx,x,y,size,color,alpha=.2){
+  ctx.save();ctx.globalAlpha*=alpha;ctx.strokeStyle=color;ctx.lineWidth=.8;
+  // kawung-inspired 4-leaf
+  const r=size*.3;
+  [0,90,180,270].forEach(deg=>{
+    const a=deg*Math.PI/180;
+    ctx.beginPath();ctx.arc(x+Math.cos(a)*r*.6,y+Math.sin(a)*r*.6,r,0,Math.PI*2);ctx.stroke();
+  });
+  ctx.beginPath();ctx.arc(x,y,r*.25,0,Math.PI*2);ctx.stroke();
+  ctx.restore();
+}
+
+function drawCornerBrackets(ctx,W,H,pad,color,size,lw=2.5){
+  [[pad,pad,0],[W-pad,pad,90],[W-pad,H-pad,180],[pad,H-pad,270]].forEach(([x,y,rot])=>{
+    ctx.save();ctx.translate(x,y);ctx.rotate(rot*Math.PI/180);
+    ctx.strokeStyle=color;ctx.lineWidth=lw;
+    ctx.beginPath();ctx.moveTo(0,size);ctx.lineTo(0,0);ctx.lineTo(size,0);ctx.stroke();
+    ctx.lineWidth=1;ctx.strokeStyle=rgba(color.replace(/rgba\(.+?,([\d.]+)\)/,'rgba($&,.5)'),0.5);
+    ctx.beginPath();ctx.moveTo(0,size*.55);ctx.lineTo(0,lw*2);ctx.lineTo(size*.55,lw*2);ctx.stroke();
+    ctx.fillStyle=color;ctx.beginPath();ctx.arc(size*.1,size*.1,3,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  });
+}
+
+function drawDoubleRect(ctx,x,y,w,h,color,gap=12){
+  ctx.strokeStyle=color;ctx.lineWidth=2;ctx.strokeRect(x,y,w,h);
+  ctx.strokeStyle=rgba(color,.35);ctx.lineWidth=1;ctx.strokeRect(x+gap,y+gap,w-gap*2,h-gap*2);
+}
+
+function drawLogoImg(ctx,logo,cx,y,size){
+  if(!logo)return;
+  ctx.save();ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=12;
+  ctx.drawImage(logo,cx-size/2,y,size,size);ctx.restore();
+}
+
+// ════════════════════════════════════════════════
+// TEMPLATE RENDERERS
+// ════════════════════════════════════════════════
+
+// ─── T0: MASJID EMAS ───
+function renderT0(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);
+  const cx=W/2;
+
+  // Random star field
+  if(v.ornament) drawStarField(ctx,W,H,theme,70);
+
+  // Mosque silhouette at bottom
+  if(v.ornament) drawMosque(ctx,W,H,theme,.6);
+
+  // Double border
+  if(v.border){
+    drawDoubleRect(ctx,H*.03,H*.03,W-H*.06,H-H*.06,theme.gold,.8*H*.015);
+    drawCornerBrackets(ctx,W,H,H*.03-2,theme.gold2,H*.055);
+  }
+
+  let topY=H*.06;
+
+  // Logo
+  if(v.showLogo&&logo){ drawLogoImg(ctx,logo,cx,topY,H*.08); topY+=H*.1; }
+
+  // Main crescent & star top center
+  if(v.moon){
+    ctx.save();ctx.translate(cx,topY+H*.06);
+    const offscreen=document.createElement('canvas');offscreen.width=W;offscreen.height=H;
+    const oc=offscreen.getContext('2d');
+    drawCrescent(oc,0,0,H*.055,theme.gold);
+    ctx.drawImage(offscreen,cx-W/2,topY+H*.06-H,W,H);
+    ctx.restore();
+    drawStar5(ctx,cx+H*.07,topY+H*.02,H*.02,theme.gold2);
+    topY+=H*.14;
+  }
+
+  // Ucapan main big
+  ctx.font=`${H*.068}px 'Cormorant Garamond',serif`;
+  ctx.fillStyle=theme.accent2;ctx.textAlign='center';
+  ctx.fillText(v.ucapan,cx,topY+H*.07);
+  topY+=H*.09;
+
+  // Moto
+  ctx.font=`italic ${H*.032}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.gold2;ctx.textAlign='center';
+  ctx.fillText(v.moto,cx,topY+H*.02);topY+=H*.045;
+
+  drawGLine(ctx,cx,topY,W*.4,theme.gold,2);topY+=H*.02;
+
+  // Arabic
+  if(v.showAyat){
+    ctx.font=`${H*.055}px 'EB Garamond',serif`;
+    ctx.fillStyle=rgba(theme.gold2,.85);ctx.textAlign='center';
+    ctx.fillText(v.ayat,cx,topY+H*.055);topY+=H*.075;
+  }
+
+  // Photo
+  const photoR=H*.11;const photoY=topY+photoR+H*.02;
+  if(v.showPhoto) drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,5);
+  const afterP=v.showPhoto?photoY+photoR:topY;
+
+  // Name
+  ctx.font=`bold ${H*.048}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.text;ctx.textAlign='center';
+  ctx.fillText(v.name,cx,afterP+H*.065);
+
+  if(v.showRole&&v.role){
+    ctx.font=`italic ${H*.022}px 'EB Garamond',serif`;
+    ctx.fillStyle=rgba(theme.sub,.9);ctx.textAlign='center';
+    ctx.fillText(v.role,cx,afterP+H*.1);
+  }
+
+  if(v.from){
+    ctx.font=`${H*.019}px 'Cinzel',serif`;
+    ctx.fillStyle=rgba(theme.gold,.8);ctx.textAlign='center';
+    ctx.fillText(v.from,cx,afterP+H*.13);
+  }
+
+  // Year
+  ctx.font=`${H*.018}px 'Cinzel',serif`;
+  ctx.fillStyle=rgba(theme.accent,.85);ctx.textAlign='center';
+  ctx.fillText(v.year,cx,afterP+H*.155);
+
+  drawGLine(ctx,cx,afterP+H*.175,W*.3,theme.gold);
+
+  // Pesan
+  ctx.font=`${H*.02}px 'EB Garamond',serif`;
+  ctx.fillStyle=rgba(theme.text,.68);ctx.textAlign='center';
+  fillTextWrapped(ctx,v.pesan,cx,afterP+H*.21,W*.7,H*.032);
+
+  if(v.showSocial&&v.social){
+    ctx.font=`${H*.018}px 'Cinzel',serif`;
+    ctx.fillStyle=rgba(theme.accent,.65);ctx.textAlign='center';
+    ctx.fillText(v.social,cx,H-.03*H);
+  }
+}
+
+// ─── T1: BULAN BINTANG ───
+function renderT1(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);
+  const cx=W/2;
+
+  if(v.ornament) drawStarField(ctx,W,H,theme,100);
+
+  if(v.border) drawCornerBrackets(ctx,W,H,H*.03,theme.gold,H*.07,3);
+
+  // Big decorative crescent side left
+  if(v.moon){
+    ctx.save();
+    const off=document.createElement('canvas');off.width=W;off.height=H;
+    const oc=off.getContext('2d');
+    drawCrescent(oc,W*.18,H*.3,H*.2,theme.gold,.7);
+    ctx.drawImage(off,0,0);ctx.restore();
+    // small stars scattered
+    [[W*.12,H*.15],[W*.28,H*.08],[W*.82,H*.12],[W*.88,H*.35],[W*.72,H*.06]].forEach(([x,y])=>{
+      drawStar5(ctx,x,y,H*.018,theme.gold2,.6);
+    });
+  }
+
+  let topY=H*.07;
+  if(v.showLogo&&logo){drawLogoImg(ctx,logo,cx,topY,H*.075);topY+=H*.1;}
+
+  // Ucapan
+  ctx.font=`${H*.072}px 'Cormorant Garamond',serif`;
+  ctx.fillStyle=theme.accent2;ctx.textAlign='center';
+  ctx.fillText(v.ucapan,cx,topY+H*.075);topY+=H*.095;
+
+  ctx.font=`italic ${H*.03}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.gold2;ctx.textAlign='center';
+  ctx.fillText(v.moto,cx,topY+H*.02);topY+=H*.05;
+
+  drawGLine(ctx,cx,topY,W*.35,theme.gold,2);topY+=H*.025;
+
+  if(v.showAyat){
+    ctx.font=`${H*.052}px 'EB Garamond',serif`;
+    ctx.fillStyle=rgba(theme.gold2,.8);ctx.textAlign='center';
+    ctx.fillText(v.ayat,cx,topY+H*.055);topY+=H*.07;
+  }
+
+  const photoR=H*.12;const photoY=topY+photoR+H*.025;
+  if(v.showPhoto){
+    // decorative ring of stars around photo
+    if(v.ornament){
+      for(let i=0;i<12;i++){
+        const a=(i/12)*Math.PI*2;
+        drawStar5(ctx,cx+Math.cos(a)*(photoR+H*.04),photoY+Math.sin(a)*(photoR+H*.04),H*.012,theme.gold,.6);
+      }
+    }
+    drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,6);
+  }
+  const afterP=v.showPhoto?photoY+photoR:topY;
+
+  ctx.font=`bold ${H*.05}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.text;ctx.textAlign='center';
+  ctx.fillText(v.name,cx,afterP+H*.07);
+  if(v.showRole&&v.role){ctx.font=`italic ${H*.022}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.9);ctx.textAlign='center';ctx.fillText(v.role,cx,afterP+H*.1);}
+  ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.8);ctx.textAlign='center';
+  ctx.fillText(v.from,cx,afterP+H*.128);
+  ctx.fillStyle=rgba(theme.accent,.85);ctx.fillText(v.year,cx,afterP+H*.155);
+
+  ctx.font=`${H*.021}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.text,.68);ctx.textAlign='center';
+  fillTextWrapped(ctx,v.pesan,cx,afterP+H*.19,W*.7,H*.032);
+  if(v.showSocial&&v.social){ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.accent,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.96);}
+}
+
+// ─── T2: GEOMETRI ISLAM ───
+function renderT2(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);
+  const cx=W/2;
+
+  // Tiled geometric pattern background
+  if(v.ornament){
+    const ts=H*.1;
+    for(let row=-1;row<H/ts+1;row++)
+      for(let col=-1;col<W/ts+1;col++)
+        drawGeomTile(ctx,col*ts+ts/2,row*ts+ts/2,ts*.42,theme.gold,.18);
+  }
+
+  // Overlay vignette to soften
+  drawVignette(ctx,W,H,.65);
+
+  if(v.border){
+    drawDoubleRect(ctx,H*.03,H*.03,W-H*.06,H-H*.06,theme.gold,H*.012);
+    drawCornerBrackets(ctx,W,H,H*.03,theme.gold2,H*.055,2.5);
+  }
+
+  let topY=H*.06;
+  if(v.showLogo&&logo){drawLogoImg(ctx,logo,cx,topY,H*.08);topY+=H*.11;}
+
+  if(v.moon){
+    ctx.save();
+    const off=document.createElement('canvas');off.width=W;off.height=H;
+    const oc=off.getContext('2d');
+    drawCrescent(oc,cx,topY+H*.06,H*.05,theme.gold2);
+    ctx.drawImage(off,0,0);ctx.restore();
+    drawStar5(ctx,cx+H*.075,topY+H*.02,H*.022,theme.gold2);
+    topY+=H*.14;
+  }
+
+  ctx.font=`${H*.065}px 'Cormorant Garamond',serif`;
+  ctx.fillStyle=theme.accent2;ctx.textAlign='center';
+  ctx.fillText(v.ucapan,cx,topY+H*.07);topY+=H*.09;
+
+  ctx.font=`italic ${H*.03}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.gold2;ctx.textAlign='center';
+  ctx.fillText(v.moto,cx,topY+H*.02);topY+=H*.045;
+
+  drawGLine(ctx,cx,topY,W*.38,theme.gold,2);topY+=H*.025;
+
+  if(v.showAyat){ctx.font=`${H*.05}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.gold2,.82);ctx.textAlign='center';ctx.fillText(v.ayat,cx,topY+H*.055);topY+=H*.075;}
+
+  const photoR=H*.115;const photoY=topY+photoR+H*.02;
+  if(v.showPhoto){
+    if(v.ornament){
+      for(let i=0;i<8;i++){const a=(i/8)*Math.PI*2;drawGeomTile(ctx,cx+Math.cos(a)*(photoR+H*.055),photoY+Math.sin(a)*(photoR+H*.055),H*.025,theme.gold,.7);}
+    }
+    drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,6);
+  }
+  const afterP=v.showPhoto?photoY+photoR:topY;
+  ctx.font=`bold ${H*.048}px 'EB Garamond',serif`;ctx.fillStyle=theme.text;ctx.textAlign='center';ctx.fillText(v.name,cx,afterP+H*.065);
+  if(v.showRole&&v.role){ctx.font=`italic ${H*.022}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.9);ctx.textAlign='center';ctx.fillText(v.role,cx,afterP+H*.1);}
+  ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.8);ctx.textAlign='center';ctx.fillText(v.from,cx,afterP+H*.127);
+  ctx.fillStyle=rgba(theme.accent,.85);ctx.fillText(v.year,cx,afterP+H*.153);
+  ctx.font=`${H*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.text,.68);ctx.textAlign='center';
+  fillTextWrapped(ctx,v.pesan,cx,afterP+H*.19,W*.7,H*.032);
+  if(v.showSocial&&v.social){ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.accent,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.96);}
+}
+
+// ─── T3: KETUPAT MEWAH ───
+function renderT3(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);
+  const cx=W/2;
+
+  // Scattered ketupat
+  if(v.ornament){
+    const positions=[[W*.08,H*.12,H*.06],[W*.88,H*.1,H*.055],[W*.05,H*.88,H*.07],[W*.92,H*.85,H*.065],[W*.5,H*.05,H*.045],[cx-W*.3,H*.5,H*.04],[cx+W*.3,H*.5,H*.04]];
+    positions.forEach(([x,y,s])=>drawKetupat(ctx,x,y,s,theme.gold,.45));
+  }
+
+  if(v.border) drawCornerBrackets(ctx,W,H,H*.03,theme.gold,H*.07,3);
+
+  let topY=H*.065;
+  if(v.showLogo&&logo){drawLogoImg(ctx,logo,cx,topY,H*.075);topY+=H*.1;}
+
+  if(v.moon){
+    ctx.save();
+    const off=document.createElement('canvas');off.width=W;off.height=H;
+    const oc=off.getContext('2d');
+    drawCrescent(oc,cx,topY+H*.065,H*.055,theme.gold2,.9);
+    ctx.drawImage(off,0,0);ctx.restore();
+    drawStar5(ctx,cx+H*.08,topY+H*.025,H*.02,theme.gold2);
+    drawStar5(ctx,cx-H*.075,topY+H*.03,H*.015,theme.gold2,.7);
+    topY+=H*.14;
+  }
+
+  ctx.font=`${H*.07}px 'Cormorant Garamond',serif`;
+  ctx.fillStyle=theme.accent2;ctx.textAlign='center';
+  ctx.fillText(v.ucapan,cx,topY+H*.075);topY+=H*.095;
+
+  ctx.font=`italic ${H*.032}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.gold2;ctx.textAlign='center';
+  ctx.fillText(v.moto,cx,topY+H*.025);topY+=H*.05;
+
+  drawGLine(ctx,cx,topY,W*.35,theme.gold,2);topY+=H*.025;
+
+  if(v.showAyat){ctx.font=`${H*.052}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.gold2,.82);ctx.textAlign='center';ctx.fillText(v.ayat,cx,topY+H*.055);topY+=H*.075;}
+
+  const photoR=H*.115;const photoY=topY+photoR+H*.02;
+  if(v.showPhoto){
+    if(v.ornament){
+      [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dx,dy])=>{
+        drawKetupat(ctx,cx+dx*(photoR+H*.065),photoY+dy*(photoR+H*.065),H*.04,theme.gold,.6);
+      });
+    }
+    drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,6);
+  }
+  const afterP=v.showPhoto?photoY+photoR:topY;
+  ctx.font=`bold ${H*.05}px 'EB Garamond',serif`;ctx.fillStyle=theme.text;ctx.textAlign='center';ctx.fillText(v.name,cx,afterP+H*.07);
+  if(v.showRole&&v.role){ctx.font=`italic ${H*.022}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.9);ctx.textAlign='center';ctx.fillText(v.role,cx,afterP+H*.102);}
+  ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.8);ctx.textAlign='center';ctx.fillText(v.from,cx,afterP+H*.13);
+  ctx.fillStyle=rgba(theme.accent,.85);ctx.fillText(v.year,cx,afterP+H*.157);
+  ctx.font=`${H*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.text,.68);ctx.textAlign='center';
+  fillTextWrapped(ctx,v.pesan,cx,afterP+H*.195,W*.7,H*.032);
+  if(v.showSocial&&v.social){ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.accent,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.96);}
+}
+
+// ─── T4: LANTERA MALAM ───
+function renderT4(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);
+  const cx=W/2;
+
+  if(v.ornament){
+    drawStarField(ctx,W,H,theme,80);
+    drawLantern(ctx,W*.12,H*.45,W*.12,H*.22,theme.gold,.5);
+    drawLantern(ctx,W*.88,H*.42,W*.11,H*.2,theme.accent,.45);
+    drawLantern(ctx,W*.08,H*.75,W*.08,H*.14,theme.gold,.3);
+    drawLantern(ctx,W*.92,H*.72,W*.08,H*.14,theme.accent,.3);
+  }
+
+  if(v.border) drawCornerBrackets(ctx,W,H,H*.03,theme.gold,H*.065,2.5);
+
+  let topY=H*.065;
+  if(v.showLogo&&logo){drawLogoImg(ctx,logo,cx,topY,H*.075);topY+=H*.1;}
+
+  if(v.moon){
+    ctx.save();
+    const off=document.createElement('canvas');off.width=W;off.height=H;
+    const oc=off.getContext('2d');
+    drawCrescent(oc,cx,topY+H*.06,H*.055,theme.gold2,.9);
+    ctx.drawImage(off,0,0);ctx.restore();
+    drawStar5(ctx,cx+H*.085,topY+H*.015,H*.022,theme.gold2);
+    topY+=H*.13;
+  }
+
+  ctx.font=`${H*.068}px 'Cormorant Garamond',serif`;
+  ctx.fillStyle=theme.accent2;ctx.textAlign='center';
+  ctx.fillText(v.ucapan,cx,topY+H*.075);topY+=H*.093;
+
+  ctx.font=`italic ${H*.03}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.gold2;ctx.textAlign='center';
+  ctx.fillText(v.moto,cx,topY+H*.02);topY+=H*.045;
+
+  drawGLine(ctx,cx,topY,W*.38,theme.gold,2);topY+=H*.025;
+
+  if(v.showAyat){ctx.font=`${H*.052}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.gold2,.82);ctx.textAlign='center';ctx.fillText(v.ayat,cx,topY+H*.055);topY+=H*.075;}
+
+  const photoR=H*.12;const photoY=topY+photoR+H*.025;
+  if(v.showPhoto){
+    if(v.ornament){
+      // lantern glow ring
+      const glow=ctx.createRadialGradient(cx,photoY,photoR*.5,cx,photoY,photoR*1.8);
+      glow.addColorStop(0,rgba(theme.gold,.15));glow.addColorStop(1,'transparent');
+      ctx.fillStyle=glow;ctx.beginPath();ctx.arc(cx,photoY,photoR*1.8,0,Math.PI*2);ctx.fill();
+    }
+    drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,6);
+  }
+  const afterP=v.showPhoto?photoY+photoR:topY;
+  ctx.font=`bold ${H*.05}px 'EB Garamond',serif`;ctx.fillStyle=theme.text;ctx.textAlign='center';ctx.fillText(v.name,cx,afterP+H*.07);
+  if(v.showRole&&v.role){ctx.font=`italic ${H*.022}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.9);ctx.textAlign='center';ctx.fillText(v.role,cx,afterP+H*.1);}
+  ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.8);ctx.textAlign='center';ctx.fillText(v.from,cx,afterP+H*.128);
+  ctx.fillStyle=rgba(theme.accent,.85);ctx.fillText(v.year,cx,afterP+H*.155);
+  ctx.font=`${H*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.text,.68);ctx.textAlign='center';
+  fillTextWrapped(ctx,v.pesan,cx,afterP+H*.19,W*.7,H*.032);
+  if(v.showSocial&&v.social){ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.accent,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.96);}
+}
+
+// ─── T5: MINIMALIS FITRI ───
+function renderT5(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);
+  const cx=W/2;
+
+  // Subtle star field
+  if(v.ornament) drawStarField(ctx,W,H,theme,40);
+
+  // Thin top/bottom bars
+  if(v.border){
+    ctx.fillStyle=theme.gold;ctx.fillRect(0,0,W,H*.006);ctx.fillRect(0,H-H*.006,W,H*.006);
+    ctx.fillStyle=rgba(theme.gold,.3);ctx.fillRect(0,H*.012,W,H*.003);ctx.fillRect(0,H-H*.015,W,H*.003);
+  }
+
+  let topY=H*.06;
+  if(v.showLogo&&logo){drawLogoImg(ctx,logo,cx,topY,H*.08);topY+=H*.1;}
+
+  if(v.moon){
+    ctx.save();
+    const off=document.createElement('canvas');off.width=W;off.height=H;
+    const oc=off.getContext('2d');
+    drawCrescent(oc,cx,topY+H*.06,H*.055,theme.gold,.85);
+    ctx.drawImage(off,0,0);ctx.restore();
+    drawStar5(ctx,cx+H*.082,topY+H*.015,H*.02,theme.gold2);
+    topY+=H*.135;
+  }
+
+  ctx.font=`${H*.07}px 'Cormorant Garamond',serif`;
+  ctx.fillStyle=theme.accent2;ctx.textAlign='center';
+  ctx.fillText(v.ucapan,cx,topY+H*.075);topY+=H*.09;
+
+  ctx.font=`italic ${H*.03}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.gold2;ctx.textAlign='center';
+  ctx.fillText(v.moto,cx,topY+H*.02);topY+=H*.048;
+
+  drawGLine(ctx,cx,topY,W*.22,theme.gold,2);topY+=H*.02;
+
+  if(v.showAyat){ctx.font=`${H*.05}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.gold2,.8);ctx.textAlign='center';ctx.fillText(v.ayat,cx,topY+H*.055);topY+=H*.07;}
+
+  const photoR=H*.125;const photoY=topY+photoR+H*.03;
+  if(v.showPhoto) drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,5);
+  const afterP=v.showPhoto?photoY+photoR:topY;
+
+  ctx.font=`bold ${H*.05}px 'EB Garamond',serif`;ctx.fillStyle=theme.text;ctx.textAlign='center';ctx.fillText(v.name,cx,afterP+H*.07);
+  if(v.showRole&&v.role){ctx.font=`italic ${H*.022}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.9);ctx.textAlign='center';ctx.fillText(v.role,cx,afterP+H*.1);}
+  ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.8);ctx.textAlign='center';ctx.fillText(v.from,cx,afterP+H*.128);
+  ctx.fillStyle=rgba(theme.accent,.85);ctx.fillText(v.year,cx,afterP+H*.154);
+  drawGLine(ctx,cx,afterP+H*.175,W*.3,theme.gold);
+  ctx.font=`${H*.021}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.text,.68);ctx.textAlign='center';
+  fillTextWrapped(ctx,v.pesan,cx,afterP+H*.21,W*.7,H*.032);
+  if(v.showSocial&&v.social){ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.accent,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.962);}
+}
+
+// ─── T6: BATIK NUSANTARA ───
+function renderT6(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);
+  const cx=W/2;
+
+  // Batik tile pattern
+  if(v.ornament){
+    const ts=H*.08;
+    for(let row=0;row<H/ts+1;row++)
+      for(let col=0;col<W/ts+1;col++)
+        drawBatikTile(ctx,col*ts,row*ts,ts,theme.gold,.22);
+    drawVignette(ctx,W,H,.6);
+  }
+
+  if(v.border){
+    drawDoubleRect(ctx,H*.03,H*.03,W-H*.06,H-H*.06,theme.gold,H*.015);
+    drawCornerBrackets(ctx,W,H,H*.03,theme.gold2,H*.06,2.5);
+  }
+
+  let topY=H*.065;
+  if(v.showLogo&&logo){drawLogoImg(ctx,logo,cx,topY,H*.078);topY+=H*.105;}
+
+  if(v.moon){
+    ctx.save();
+    const off=document.createElement('canvas');off.width=W;off.height=H;
+    const oc=off.getContext('2d');
+    drawCrescent(oc,cx,topY+H*.065,H*.055,theme.gold2,.9);
+    ctx.drawImage(off,0,0);ctx.restore();
+    drawStar5(ctx,cx+H*.085,topY+H*.025,H*.02,theme.gold2);
+    topY+=H*.14;
+  }
+
+  ctx.font=`${H*.068}px 'Cormorant Garamond',serif`;
+  ctx.fillStyle=theme.accent2;ctx.textAlign='center';
+  ctx.fillText(v.ucapan,cx,topY+H*.075);topY+=H*.09;
+
+  ctx.font=`italic ${H*.03}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.gold2;ctx.textAlign='center';
+  ctx.fillText(v.moto,cx,topY+H*.02);topY+=H*.045;
+
+  drawGLine(ctx,cx,topY,W*.38,theme.gold,2);topY+=H*.025;
+
+  if(v.showAyat){ctx.font=`${H*.052}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.gold2,.82);ctx.textAlign='center';ctx.fillText(v.ayat,cx,topY+H*.055);topY+=H*.075;}
+
+  const photoR=H*.115;const photoY=topY+photoR+H*.02;
+  if(v.showPhoto){
+    if(v.ornament){
+      // batik ring
+      for(let i=0;i<16;i++){const a=(i/16)*Math.PI*2;drawBatikTile(ctx,cx+Math.cos(a)*(photoR+H*.05),photoY+Math.sin(a)*(photoR+H*.05),H*.03,theme.gold,.9);}
+    }
+    drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,6);
+  }
+  const afterP=v.showPhoto?photoY+photoR:topY;
+  ctx.font=`bold ${H*.05}px 'EB Garamond',serif`;ctx.fillStyle=theme.text;ctx.textAlign='center';ctx.fillText(v.name,cx,afterP+H*.07);
+  if(v.showRole&&v.role){ctx.font=`italic ${H*.022}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.9);ctx.textAlign='center';ctx.fillText(v.role,cx,afterP+H*.1);}
+  ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.8);ctx.textAlign='center';ctx.fillText(v.from,cx,afterP+H*.128);
+  ctx.fillStyle=rgba(theme.accent,.85);ctx.fillText(v.year,cx,afterP+H*.155);
+  ctx.font=`${H*.02}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.text,.68);ctx.textAlign='center';
+  fillTextWrapped(ctx,v.pesan,cx,afterP+H*.19,W*.7,H*.032);
+  if(v.showSocial&&v.social){ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.accent,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.96);}
+}
+
+// ─── T7: KLASIK SIMETRI ───
+function renderT7(ctx,W,H,theme,v,photo,logo){
+  drawBg(ctx,W,H,theme);
+  const cx=W/2;
+
+  if(v.ornament) drawStarField(ctx,W,H,theme,55);
+
+  if(v.border){
+    drawDoubleRect(ctx,H*.035,H*.035,W-H*.07,H-H*.07,theme.gold,H*.014);
+    drawCornerBrackets(ctx,W,H,H*.035,theme.gold2,H*.065,3);
+  }
+
+  let topY=H*.065;
+  if(v.showLogo&&logo){drawLogoImg(ctx,logo,cx,topY,H*.08);topY+=H*.105;}
+
+  if(v.ornament){
+    ctx.font=`${H*.035}px serif`;ctx.fillStyle=rgba(theme.gold,.7);ctx.textAlign='center';
+    ctx.fillText('❦',cx-H*.08,topY+H*.035);ctx.fillText('❧',cx+H*.08,topY+H*.035);
+    topY+=H*.045;
+  }
+
+  if(v.moon){
+    ctx.save();
+    const off=document.createElement('canvas');off.width=W;off.height=H;
+    const oc=off.getContext('2d');
+    drawCrescent(oc,cx,topY+H*.065,H*.055,theme.gold2,.9);
+    ctx.drawImage(off,0,0);ctx.restore();
+    drawStar5(ctx,cx+H*.085,topY+H*.025,H*.022,theme.gold2);
+    drawStar5(ctx,cx-H*.08,topY+H*.03,H*.016,theme.gold2,.7);
+    topY+=H*.14;
+  }
+
+  ctx.font=`${H*.068}px 'Cormorant Garamond',serif`;
+  ctx.fillStyle=theme.accent2;ctx.textAlign='center';
+  ctx.fillText(v.ucapan,cx,topY+H*.075);topY+=H*.09;
+
+  ctx.font=`italic ${H*.03}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.gold2;ctx.textAlign='center';
+  ctx.fillText(v.moto,cx,topY+H*.02);topY+=H*.045;
+
+  drawGLine(ctx,cx,topY,W*.4,theme.gold,2);topY+=H*.015;
+
+  // Decorative year band
+  ctx.font=`${H*.018}px 'Cinzel',serif`;
+  ctx.fillStyle=rgba(theme.accent,.85);ctx.textAlign='center';
+  ctx.fillText(`✦ ${v.year} ✦`,cx,topY+H*.025);topY+=H*.04;
+
+  drawGLine(ctx,cx,topY,W*.4,theme.gold,2);topY+=H*.018;
+
+  if(v.showAyat){ctx.font=`${H*.052}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.gold2,.82);ctx.textAlign='center';ctx.fillText(v.ayat,cx,topY+H*.055);topY+=H*.07;}
+
+  const photoR=H*.115;const photoY=topY+photoR+H*.02;
+  if(v.showPhoto){
+    if(v.ornament){
+      for(let i=0;i<8;i++){
+        const a=(i/8)*Math.PI*2;
+        ctx.font=`${H*.022}px serif`;ctx.fillStyle=rgba(theme.gold,.6);
+        ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText('✦',cx+Math.cos(a)*(photoR+H*.04),photoY+Math.sin(a)*(photoR+H*.04));
+        ctx.textBaseline='alphabetic';
+      }
+    }
+    drawCirclePhoto(ctx,photo,cx,photoY,photoR,theme.gold,6);
+  }
+  const afterP=v.showPhoto?photoY+photoR:topY;
+  ctx.font=`bold ${H*.05}px 'EB Garamond',serif`;ctx.fillStyle=theme.text;ctx.textAlign='center';ctx.fillText(v.name,cx,afterP+H*.07);
+  if(v.showRole&&v.role){ctx.font=`italic ${H*.022}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.sub,.9);ctx.textAlign='center';ctx.fillText(v.role,cx,afterP+H*.1);}
+  ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.gold,.8);ctx.textAlign='center';ctx.fillText(v.from,cx,afterP+H*.128);
+  drawGLine(ctx,cx,afterP+H*.15,W*.3,theme.gold);
+  ctx.font=`${H*.021}px 'EB Garamond',serif`;ctx.fillStyle=rgba(theme.text,.68);ctx.textAlign='center';
+  fillTextWrapped(ctx,v.pesan,cx,afterP+H*.185,W*.7,H*.032);
+  if(v.showSocial&&v.social){ctx.font=`${H*.018}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.accent,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H*.962);}
+}
+
+const RENDERERS=[renderT0,renderT1,renderT2,renderT3,renderT4,renderT5,renderT6,renderT7];
+
+// ════════════════════════════════════════════════
+// GET VALUES
+// ════════════════════════════════════════════════
+function getVals(){
+  return {
+    name:    document.getElementById('fName').value||'Nama Pengirim',
+    role:    document.getElementById('fRole').value,
+    from:    document.getElementById('fFrom').value,
+    year:    document.getElementById('fYear').value,
+    ayat:    document.getElementById('fAyat').value,
+    ucapan:  document.getElementById('fUcapan').value,
+    moto:    document.getElementById('fMoto').value,
+    pesan:   document.getElementById('fPesan').value,
+    social:  document.getElementById('fSocial').value,
+    ornament:document.getElementById('tOrnament').checked,
+    border:  document.getElementById('tBorder').checked,
+    moon:    document.getElementById('tMoon').checked,
+    showAyat:document.getElementById('tAyat').checked,
+    showLogo:document.getElementById('tLogo').checked,
+    showPhoto:document.getElementById('tPhoto').checked,
+    showRole:document.getElementById('tRole').checked,
+    showSocial:document.getElementById('tSocial').checked,
+  };
+}
+
+// ════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════
+function doRenderToCanvas(cv){
+  cv.width=S.cw;cv.height=S.ch;
+  const ctx=cv.getContext('2d');
+  const v=getVals();
+  const theme=THEMES[S.theme];
+  (RENDERERS[S.template]||renderT0)(ctx,S.cw,S.ch,theme,v,S.photoImg,S.logoImg);
+}
+function doRender(){
+  doRenderToCanvas(document.getElementById('mainCanvas'));
+  renderAllMini();
+}
+function doDownload(){
+  const cv=document.getElementById('renderCanvas');
+  doRenderToCanvas(cv);
+  const a=document.createElement('a');
+  a.download=`idul-fitri-${Date.now()}.png`;
+  a.href=cv.toDataURL('image/png',1);a.click();
+}
+document.getElementById('mainCanvas').onclick=doDownload;
+
+// ════════════════════════════════════════════════
+// MINI PREVIEWS
+// ════════════════════════════════════════════════
+function renderMini(cv,tid){
+  const W=90,H=120;cv.width=W;cv.height=H;
+  const ctx=cv.getContext('2d');
+  const theme=THEMES[S.theme];
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,theme.bg2);g.addColorStop(1,theme.bg);
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // tiny vignette
+  const vg=ctx.createRadialGradient(W/2,H/2,5,W/2,H/2,H*.65);
+  vg.addColorStop(0,'transparent');vg.addColorStop(1,'rgba(0,0,0,.6)');
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+
+  // template-specific hint
+  if(tid===0||tid===7){// full border
+    ctx.strokeStyle=theme.gold;ctx.lineWidth=1.5;ctx.strokeRect(3,3,W-6,H-6);
+    ctx.strokeStyle=rgba(theme.gold,.35);ctx.lineWidth=.6;ctx.strokeRect(5,5,W-10,H-10);
+  } else if(tid===1){// star field hint
+    for(let i=0;i<15;i++){ctx.fillStyle=rgba(theme.gold2,.5+Math.random()*.5);ctx.beginPath();ctx.arc(Math.random()*W,Math.random()*H,Math.random()+.5,0,Math.PI*2);ctx.fill();}
+  } else if(tid===2){// geom tiles
+    for(let r=0;r<4;r++)for(let c=0;c<4;c++)drawGeomTile(ctx,c*W/3,r*H/3,H*.06,theme.gold,.3);
+    drawVignette(ctx,W,H,.4);
+  } else if(tid===3){// ketupat
+    drawKetupat(ctx,W*.15,H*.2,H*.06,theme.gold,.5);
+    drawKetupat(ctx,W*.82,H*.75,H*.055,theme.gold,.45);
+  } else if(tid===4){// lanterns
+    drawLantern(ctx,W*.15,H*.45,W*.12,H*.2,theme.gold,.5);
+    drawLantern(ctx,W*.85,H*.4,W*.1,H*.18,theme.accent,.45);
+  } else if(tid===5){// minimal lines
+    ctx.fillStyle=theme.gold;ctx.fillRect(0,0,W,2);ctx.fillRect(0,H-2,W,2);
+  } else if(tid===6){// batik
+    for(let r=0;r<5;r++)for(let c=0;c<5;c++)drawBatikTile(ctx,c*W/4,r*H/4,H*.065,theme.gold,.35);
+    drawVignette(ctx,W,H,.4);
+  }
+
+  // crescent
+  ctx.save();
+  const off=document.createElement('canvas');off.width=W;off.height=H;
+  const oc=off.getContext('2d');
+  drawCrescent(oc,W/2,H*.22,H*.065,theme.gold2,.8);
+  ctx.drawImage(off,0,0);ctx.restore();
+  drawStar5(ctx,W*.68,H*.13,H*.025,theme.gold2,.7);
+
+  // title line
+  ctx.font=`${H*.1}px 'Cormorant Garamond',serif`;ctx.fillStyle=rgba(theme.accent2,.85);ctx.textAlign='center';
+  ctx.fillText('Idul Fitri',W/2,H*.52);
+
+  // photo circle
+  ctx.beginPath();ctx.arc(W/2,H*.73,H*.1,0,Math.PI*2);
+  ctx.strokeStyle=theme.gold;ctx.lineWidth=1.5;ctx.stroke();
+  ctx.fillStyle=rgba(theme.gold,.1);ctx.fill();
+
+  // name line
+  ctx.fillStyle=rgba(theme.text,.6);ctx.fillRect(W*.2,H*.87,W*.6,1.5);
+}
+
+function renderAllMini(){
+  document.querySelectorAll('.tmpl-item canvas').forEach((cv,i)=>renderMini(cv,i));
+}
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+function initTemplates(){
+  const grid=document.getElementById('tmplGrid');
+  TEMPLATE_NAMES.forEach((name,i)=>{
+    const item=document.createElement('div');
+    item.className='tmpl-item'+(i===0?' active':'');
+    const cv=document.createElement('canvas');
+    const lbl=document.createElement('div');
+    lbl.className='lbl';lbl.textContent=name;
+    item.appendChild(cv);item.appendChild(lbl);
+    item.onclick=()=>{
+      document.querySelectorAll('.tmpl-item').forEach(x=>x.classList.remove('active'));
+      item.classList.add('active');S.template=i;doRender();
+    };
+    grid.appendChild(item);
+  });
+}
+
+function initColors(){
+  const row=document.getElementById('colorRow');
+  THEMES.forEach((t,i)=>{
+    const d=document.createElement('div');
+    d.className='cdot'+(i===0?' active':'');
+    d.style.background=`linear-gradient(135deg,${t.bg} 40%,${t.accent} 100%)`;
+    d.style.borderColor=t.accent;
+    d.title=t.name;
+    d.onclick=()=>{
+      document.querySelectorAll('.cdot').forEach(x=>x.classList.remove('active'));
+      d.classList.add('active');S.theme=i;doRender();
+    };
+    row.appendChild(d);
+  });
+}
+
+function initSizes(){
+  document.querySelectorAll('.size-pill').forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll('.size-pill').forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      S.cw=+btn.dataset.w;S.ch=+btn.dataset.h;doRender();
+    };
+  });
+}
+
+function initUploads(){
+  function handle(inputId,thumbId,key){
+    document.getElementById(inputId).onchange=function(e){
+      const f=e.target.files[0];if(!f)return;
+      const r=new FileReader();
+      r.onload=ev=>{
+        const img=new Image();
+        img.onload=()=>{S[key]=img;document.getElementById(thumbId).src=ev.target.result;document.getElementById(thumbId).style.display='block';doRender();};
+        img.src=ev.target.result;
+      };r.readAsDataURL(f);
+    };
+  }
+  handle('photoInput','photoThumb','photoImg');
+  handle('logoInput','logoThumb','logoImg');
+}
+
+function initLive(){
+  ['fName','fRole','fFrom','fYear','fAyat','fUcapan','fMoto','fPesan','fSocial'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',doRender);
+  });
+  ['tOrnament','tBorder','tMoon','tAyat','tLogo','tPhoto','tRole','tSocial'].forEach(id=>{
+    document.getElementById(id).addEventListener('change',doRender);
+  });
+}
+
+// BOOT
+initTemplates();
+initColors();
+initSizes();
+initUploads();
+initLive();
+document.fonts.ready.then(()=>{renderAllMini();doRender();});
+setTimeout(()=>{renderAllMini();doRender();},600);
+</script>
+</body>
+</html>

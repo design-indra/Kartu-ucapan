@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pembuat Kartu Duka Cita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1614;
+    --parchment: #f5f0e8;
+    --gold: #c9a96e;
+    --gold-light: #e8d5a3;
+    --ash: #8a8078;
+    --smoke: #d4cec6;
+    --deep: #2d2420;
+    --mist: #ede8e0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1e1a17;
+    background-image: 
+      radial-gradient(ellipse at 20% 20%, rgba(80,60,40,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(60,45,30,0.3) 0%, transparent 60%);
+    min-height: 100vh;
+    font-family: 'EB Garamond', serif;
+    color: var(--parchment);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header {
+    text-align: center;
+    padding: 3rem 2rem 2rem;
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1.5rem auto 0;
+  }
+
+  header .subtitle {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ash);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+
+  header h1 {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--gold-light);
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+  }
+
+  .app-wrapper {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 2rem 4rem;
+    align-items: start;
+  }
+
+  /* ===== PANEL KIRI ===== */
+  .panel {
+    background: rgba(30,25,20,0.85);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: 4px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(201,169,110,0.25);
+  }
+
+  .field-group { margin-bottom: 1.6rem; }
+
+  label {
+    display: block;
+    font-family: 'EB Garamond', serif;
+    font-size: 0.88rem;
+    color: var(--smoke);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.03em;
+  }
+
+  input[type="text"], textarea, select {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,169,110,0.2);
+    color: var(--parchment);
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: rgba(201,169,110,0.6);
+    background: rgba(255,255,255,0.07);
+  }
+
+  textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+  select option { background: #2d2420; }
+
+  /* Template Picker */
+  .template-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+
+  .tmpl-btn {
+    border: 2px solid rgba(201,169,110,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    background: none;
+    padding: 0;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.2s;
+    aspect-ratio: 4/3;
+    position: relative;
+  }
+
+  .tmpl-btn:hover { border-color: rgba(201,169,110,0.6); transform: scale(1.03); }
+  .tmpl-btn.active { border-color: var(--gold); }
+
+  .tmpl-btn canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Color Picker */
+  .color-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .color-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .color-dot:hover, .color-dot.active {
+    border-color: var(--gold);
+    transform: scale(1.15);
+  }
+
+  /* Action Buttons */
+  .btn-primary {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    background: linear-gradient(135deg, #8b6914, var(--gold), #8b6914);
+    background-size: 200% 200%;
+    border: none;
+    color: #1a1209;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-position 0.4s, transform 0.2s;
+    margin-bottom: 0.6rem;
+  }
+
+  .btn-primary:hover {
+    background-position: 100% 100%;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid rgba(201,169,110,0.4);
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(201,169,110,0.1);
+    border-color: var(--gold);
+  }
+
+  /* ===== PREVIEW CANVAS ===== */
+  .preview-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .preview-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--ash);
+    text-align: center;
+  }
+
+  #previewCanvas {
+    width: 100%;
+    max-width: 660px;
+    border-radius: 4px;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,169,110,0.15);
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+  }
+
+  #previewCanvas:hover {
+    box-shadow: 0 20px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,169,110,0.4), 0 0 40px rgba(201,169,110,0.08);
+  }
+
+  .hint {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--ash);
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,169,110,0.3), transparent);
+    margin: 1.5rem 0;
+  }
+
+  /* Ornament toggle row */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+  }
+
+  .toggle-row label { margin: 0; }
+
+  .toggle {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+  }
+
+  .toggle input { display: none; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    border: 1px solid rgba(201,169,110,0.3);
+    transition: background 0.3s;
+  }
+
+  .toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 16px; height: 16px;
+    background: var(--ash);
+    border-radius: 50%;
+    transition: transform 0.3s, background 0.3s;
+  }
+
+  .toggle input:checked + .toggle-slider { background: rgba(201,169,110,0.2); }
+  .toggle input:checked + .toggle-slider::after {
+    transform: translateX(18px);
+    background: var(--gold);
+  }
+
+  @media (max-width: 768px) {
+    .app-wrapper { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="subtitle">— dengan penuh hormat —</p>
+  <h1>Kartu Duka Cita</h1>
+</header>
+
+<div class="app-wrapper">
+  <!-- PANEL KIRI -->
+  <div class="panel">
+
+    <div class="section-label">Pilih Template</div>
+    <div class="template-grid" id="templateGrid">
+      <!-- rendered by JS -->
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Informasi Mendiang</div>
+
+    <div class="field-group">
+      <label>Nama Mendiang</label>
+      <input type="text" id="nameMendiang" value="Bapak H. Ahmad Suparjo" placeholder="Masukkan nama...">
+    </div>
+
+    <div class="field-group">
+      <label>Tahun Lahir – Tahun Wafat</label>
+      <input type="text" id="tahun" value="1950 – 2024" placeholder="YYYY – YYYY">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Isi Ucapan</div>
+
+    <div class="field-group">
+      <label>Ayat / Doa Pembuka</label>
+      <input type="text" id="ayat" value="إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ">
+    </div>
+
+    <div class="field-group">
+      <label>Pesan Belasungkawa</label>
+      <textarea id="pesan">Kami turut berduka cita yang sedalam-dalamnya atas kepergian beliau. Semoga Allah SWT menerima segala amal ibadahnya dan menempatkan beliau di sisi-Nya. Semoga keluarga yang ditinggalkan diberikan ketabahan dan kekuatan.</textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Dari</label>
+      <input type="text" id="pengirim" value="Keluarga Besar PT. Nusantara Jaya">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Gaya</div>
+
+    <div class="field-group">
+      <label>Warna Tema</label>
+      <div class="color-row" id="colorRow"></div>
+    </div>
+
+    <div class="field-group">
+      <div class="toggle-row">
+        <label>Tampilkan Ornamen</label>
+        <label class="toggle">
+          <input type="checkbox" id="showOrnament" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <label>Tampilkan Garis Emas</label>
+        <label class="toggle">
+          <input type="checkbox" id="showLines" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="btn-primary" onclick="downloadCard()">⬇ UNDUH KARTU (PNG)</button>
+    <button class="btn-secondary" onclick="renderCard()">↻ PERBARUI PRATINJAU</button>
+
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-section">
+    <div class="preview-label">✦ PRATINJAU KARTU ✦</div>
+    <canvas id="previewCanvas" width="1320" height="924"></canvas>
+    <p class="hint">Klik kartu untuk mengunduh · Resolusi tinggi siap cetak</p>
+  </div>
+</div>
+
+<!-- Hidden large canvas for download -->
+<canvas id="downloadCanvas" width="1320" height="924" style="display:none"></canvas>
+
+<script>
+// ============================================================
+// CONFIG
+// ============================================================
+const THEMES = [
+  { name: 'Klasik Hitam', bg: '#0e0c0a', accent: '#c9a96e', text: '#f0ebe0', border: '#8b6914' },
+  { name: 'Abu Elegan',   bg: '#1e1e20', accent: '#c0b89a', text: '#ede9e2', border: '#7a7260' },
+  { name: 'Biru Langit',  bg: '#0f1520', accent: '#8aafd4', text: '#dce8f5', border: '#4a7098' },
+  { name: 'Hijau Daun',   bg: '#0e150f', accent: '#7aad7e', text: '#ddeedd', border: '#3d6e42' },
+  { name: 'Ungu Senja',   bg: '#140f1e', accent: '#a98ac8', text: '#e8ddf5', border: '#6a4a8a' },
+  { name: 'Putih Bersih', bg: '#f5f0e8', accent: '#6b5a3a', text: '#2a2015', border: '#9a8060' },
+];
+
+const TEMPLATES = [
+  { id: 0, name: 'Klasik' },
+  { id: 1, name: 'Modern' },
+  { id: 2, name: 'Bunga' },
+];
+
+let state = {
+  template: 0,
+  theme: 0,
+  nameMendiang: 'Bapak H. Ahmad Suparjo',
+  tahun: '1950 – 2024',
+  ayat: 'إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ',
+  pesan: 'Kami turut berduka cita yang sedalam-dalamnya atas kepergian beliau. Semoga Allah SWT menerima segala amal ibadahnya dan menempatkan beliau di sisi-Nya. Semoga keluarga yang ditinggalkan diberikan ketabahan dan kekuatan.',
+  pengirim: 'Keluarga Besar PT. Nusantara Jaya',
+  showOrnament: true,
+  showLines: true,
+};
+
+// ============================================================
+// INIT UI
+// ============================================================
+function initColorRow() {
+  const row = document.getElementById('colorRow');
+  THEMES.forEach((t, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'color-dot' + (i === 0 ? ' active' : '');
+    dot.style.background = `linear-gradient(135deg, ${t.bg} 50%, ${t.accent} 100%)`;
+    dot.title = t.name;
+    dot.style.border = `2px solid ${t.accent}`;
+    dot.onclick = () => {
+      document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+      state.theme = i;
+      renderCard();
+    };
+    row.appendChild(dot);
+  });
+}
+
+function initTemplateGrid() {
+  const grid = document.getElementById('templateGrid');
+  TEMPLATES.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tmpl-btn' + (i === 0 ? ' active' : '');
+    btn.title = t.name;
+    const cv = document.createElement('canvas');
+    cv.width = 120; cv.height = 90;
+    btn.appendChild(cv);
+    btn.onclick = () => {
+      document.querySelectorAll('.tmpl-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.template = i;
+      renderCard();
+    };
+    grid.appendChild(btn);
+    drawMiniTemplate(cv, i);
+  });
+}
+
+function drawMiniTemplate(cv, idx) {
+  const ctx = cv.getContext('2d');
+  const t = THEMES[state.theme || 0];
+  ctx.fillStyle = t.bg;
+  ctx.fillRect(0, 0, cv.width, cv.height);
+
+  if (idx === 0) {
+    // Classic border
+    ctx.strokeStyle = t.accent;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(5, 5, cv.width-10, cv.height-10);
+    ctx.strokeRect(8, 8, cv.width-16, cv.height-16);
+    ctx.fillStyle = t.accent;
+    ctx.fillRect(55, 18, 10, 1);
+    ctx.fillStyle = t.text + 'cc';
+    ctx.font = '7px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦ DUKA CITA ✦', 60, 45);
+    ctx.font = '5px serif';
+    ctx.fillText('In Memoriam', 60, 60);
+  } else if (idx === 1) {
+    // Modern minimal
+    ctx.fillStyle = t.accent;
+    ctx.fillRect(0, 0, 4, cv.height);
+    ctx.fillRect(0, 0, cv.width, 4);
+    ctx.fillStyle = t.text + 'aa';
+    ctx.font = 'bold 9px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('IN', 12, 30);
+    ctx.fillText('MEMORIAM', 12, 42);
+    ctx.fillStyle = t.accent + '88';
+    ctx.fillRect(12, 55, 50, 1);
+  } else {
+    // Floral
+    ctx.fillStyle = t.accent + '40';
+    for (let a = 0; a < 360; a += 45) {
+      ctx.beginPath();
+      const rad = a * Math.PI/180;
+      ctx.arc(60 + Math.cos(rad)*25, 45 + Math.sin(rad)*20, 8, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.fillStyle = t.bg;
+    ctx.beginPath();
+    ctx.arc(60, 45, 18, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = t.text + 'cc';
+    ctx.font = '6px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('DUKA', 60, 43);
+    ctx.fillText('CITA', 60, 52);
+  }
+}
+
+// ============================================================
+// MAIN RENDER
+// ============================================================
+function getState() {
+  return {
+    ...state,
+    nameMendiang: document.getElementById('nameMendiang').value,
+    tahun: document.getElementById('tahun').value,
+    ayat: document.getElementById('ayat').value,
+    pesan: document.getElementById('pesan').value,
+    pengirim: document.getElementById('pengirim').value,
+    showOrnament: document.getElementById('showOrnament').checked,
+    showLines: document.getElementById('showLines').checked,
+  };
+}
+
+function renderCard() {
+  const s = getState();
+  const cv = document.getElementById('previewCanvas');
+  drawCardToCanvas(cv, s);
+}
+
+function drawCardToCanvas(canvas, s) {
+  const W = canvas.width, H = canvas.height;
+  const ctx = canvas.getContext('2d');
+  const theme = THEMES[s.theme];
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = theme.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Gradient vignette
+  const vg = ctx.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.8);
+  vg.addColorStop(0, 'rgba(0,0,0,0)');
+  vg.addColorStop(1, 'rgba(0,0,0,0.55)');
+  ctx.fillStyle = vg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Noise texture overlay (subtle grain)
+  drawGrain(ctx, W, H, 0.03);
+
+  if (s.template === 0) drawClassic(ctx, W, H, theme, s);
+  else if (s.template === 1) drawModern(ctx, W, H, theme, s);
+  else drawFloral(ctx, W, H, theme, s);
+}
+
+// ---- GRAIN ----
+function drawGrain(ctx, W, H, alpha) {
+  const imgData = ctx.createImageData(W, H);
+  for (let i = 0; i < imgData.data.length; i += 4) {
+    const v = Math.random() * 255;
+    imgData.data[i] = v;
+    imgData.data[i+1] = v;
+    imgData.data[i+2] = v;
+    imgData.data[i+3] = alpha * 255;
+  }
+  ctx.putImageData(imgData, 0, 0);
+}
+
+// ---- WRAP TEXT ----
+function wrapText(ctx, text, x, y, maxW, lineH) {
+  const words = text.split(' ');
+  let line = '';
+  const lines = [];
+  words.forEach(w => {
+    const test = line + w + ' ';
+    if (ctx.measureText(test).width > maxW && line) {
+      lines.push(line.trim());
+      line = w + ' ';
+    } else { line = test; }
+  });
+  if (line.trim()) lines.push(line.trim());
+  lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineH));
+  return lines.length;
+}
+
+// ============================================================
+// TEMPLATE: KLASIK
+// ============================================================
+function drawClassic(ctx, W, H, theme, s) {
+  const pad = 60;
+
+  // Outer border
+  if (s.showLines) {
+    ctx.strokeStyle = theme.accent;
+    ctx.lineWidth = 3;
+    ctx.strokeRect(pad, pad, W - pad*2, H - pad*2);
+    ctx.strokeStyle = theme.accent + '55';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(pad+10, pad+10, W - (pad+10)*2, H - (pad+10)*2);
+  }
+
+  // Corner ornaments
+  if (s.showOrnament) {
+    drawCornerOrnament(ctx, pad+2, pad+2, theme.accent, 0);
+    drawCornerOrnament(ctx, W-pad-2, pad+2, theme.accent, 90);
+    drawCornerOrnament(ctx, pad+2, H-pad-2, theme.accent, 270);
+    drawCornerOrnament(ctx, W-pad-2, H-pad-2, theme.accent, 180);
+  }
+
+  const cx = W / 2;
+
+  // Dove / symbol at top
+  if (s.showOrnament) {
+    ctx.font = `${W*0.055}px serif`;
+    ctx.fillStyle = theme.accent + 'cc';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦', cx, pad + 80);
+  }
+
+  // "INNALILLAHI" or ayat
+  ctx.font = `italic ${W*0.028}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.accent;
+  ctx.textAlign = 'center';
+  ctx.fillText(s.ayat, cx, pad + 140);
+
+  // Divider line
+  if (s.showLines) {
+    drawGoldLine(ctx, cx, pad+155, W*0.35, theme.accent);
+  }
+
+  // "IN MEMORIAM"
+  ctx.font = `${W*0.018}px 'Cinzel', serif`;
+  ctx.fillStyle = theme.text + '99';
+  ctx.letterSpacing = '0.3em';
+  ctx.fillText('— IN MEMORIAM —', cx, pad + 190);
+  ctx.letterSpacing = '0';
+
+  // Name
+  ctx.font = `bold ${W*0.052}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.text;
+  ctx.fillText(s.nameMendiang, cx, pad + 270);
+
+  // Tahun
+  ctx.font = `${W*0.022}px 'Cinzel', serif`;
+  ctx.fillStyle = theme.accent;
+  ctx.fillText(s.tahun, cx, pad + 320);
+
+  if (s.showLines) drawGoldLine(ctx, cx, pad+340, W*0.25, theme.accent);
+
+  // Pesan
+  ctx.font = `${W*0.022}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.text + 'cc';
+  wrapText(ctx, s.pesan, cx, pad + 390, W*0.62, W*0.034);
+
+  // Pengirim
+  ctx.font = `italic ${W*0.02}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.accent + 'bb';
+  ctx.fillText('— ' + s.pengirim + ' —', cx, H - pad - 50);
+}
+
+function drawGoldLine(ctx, cx, y, halfW, color) {
+  const g = ctx.createLinearGradient(cx-halfW, y, cx+halfW, y);
+  g.addColorStop(0, 'transparent');
+  g.addColorStop(0.3, color);
+  g.addColorStop(0.5, color + 'ff');
+  g.addColorStop(0.7, color);
+  g.addColorStop(1, 'transparent');
+  ctx.strokeStyle = g;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(cx - halfW, y);
+  ctx.lineTo(cx + halfW, y);
+  ctx.stroke();
+}
+
+function drawCornerOrnament(ctx, x, y, color, rot) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot * Math.PI / 180);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, 30); ctx.lineTo(0, 0); ctx.lineTo(30, 0);
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(12, 12, 3, 0, Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+}
+
+// ============================================================
+// TEMPLATE: MODERN
+// ============================================================
+function drawModern(ctx, W, H, theme, s) {
+  const cx = W / 2;
+
+  // Left accent bar
+  const barW = 14;
+  ctx.fillStyle = theme.accent;
+  ctx.fillRect(0, 0, barW, H);
+
+  // Top accent bar
+  ctx.fillRect(0, 0, W, barW);
+
+  // Large text background element
+  ctx.font = `bold ${W*0.28}px 'Cinzel', serif`;
+  ctx.fillStyle = theme.accent + '08';
+  ctx.textAlign = 'left';
+  ctx.fillText('✦', W*0.55, H*0.7);
+
+  const lx = barW + 70;
+
+  // IN MEMORIAM
+  ctx.font = `${W*0.013}px 'Cinzel', serif`;
+  ctx.fillStyle = theme.accent;
+  ctx.textAlign = 'left';
+  ctx.fillText('IN MEMORIAM', lx, 120);
+
+  // Thin line
+  if (s.showLines) {
+    ctx.fillStyle = theme.accent;
+    ctx.fillRect(lx, 135, W * 0.25, 2);
+  }
+
+  // Ayat
+  ctx.font = `italic ${W*0.025}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.accent + 'cc';
+  ctx.textAlign = 'left';
+  ctx.fillText(s.ayat, lx, 195);
+
+  // Name BIG
+  ctx.font = `${W*0.065}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.text;
+  ctx.fillText(s.nameMendiang, lx, 310);
+
+  // Tahun
+  ctx.font = `${W*0.018}px 'Cinzel', serif`;
+  ctx.fillStyle = theme.accent;
+  ctx.fillText(s.tahun, lx, 365);
+
+  // Horizontal divider
+  if (s.showLines) {
+    ctx.fillStyle = theme.accent + '44';
+    ctx.fillRect(lx, 400, W - lx - 80, 1);
+  }
+
+  // Pesan
+  ctx.font = `${W*0.021}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.text + 'bb';
+  wrapText(ctx, s.pesan, lx, 450, W*0.62, W*0.032);
+
+  // Pengirim
+  ctx.font = `italic ${W*0.018}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.accent;
+  ctx.textAlign = 'left';
+  ctx.fillText('— ' + s.pengirim, lx, H - 80);
+
+  // Bottom right decoration
+  if (s.showOrnament) {
+    ctx.font = `${W*0.04}px serif`;
+    ctx.fillStyle = theme.accent + '55';
+    ctx.textAlign = 'right';
+    ctx.fillText('✦  ✦  ✦', W - 60, H - 60);
+  }
+}
+
+// ============================================================
+// TEMPLATE: BUNGA / FLORAL
+// ============================================================
+function drawFloral(ctx, W, H, theme, s) {
+  const cx = W / 2, cy = H / 2;
+
+  // Circular floral pattern
+  if (s.showOrnament) {
+    for (let i = 0; i < 16; i++) {
+      const angle = (i / 16) * Math.PI * 2;
+      const r = H * 0.38;
+      const fx = cx + Math.cos(angle) * r;
+      const fy = cy + Math.sin(angle) * r;
+      ctx.save();
+      ctx.translate(fx, fy);
+      ctx.rotate(angle);
+      ctx.font = `${W*0.025}px serif`;
+      ctx.fillStyle = theme.accent + '30';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('✿', 0, 0);
+      ctx.restore();
+    }
+    // Inner ring
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2 + Math.PI/8;
+      const r = H * 0.26;
+      const fx = cx + Math.cos(angle) * r;
+      const fy = cy + Math.sin(angle) * r;
+      ctx.font = `${W*0.018}px serif`;
+      ctx.fillStyle = theme.accent + '50';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('✦', fx, fy);
+    }
+  }
+
+  // Central circle bg
+  ctx.save();
+  const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, H*0.22);
+  cg.addColorStop(0, theme.bg + 'ff');
+  cg.addColorStop(1, theme.bg + 'cc');
+  ctx.fillStyle = cg;
+  ctx.beginPath();
+  ctx.arc(cx, cy, H*0.22, 0, Math.PI*2);
+  ctx.fill();
+  if (s.showLines) {
+    ctx.strokeStyle = theme.accent;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.strokeStyle = theme.accent + '44';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, H*0.19, 0, Math.PI*2);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Centered text
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+
+  // Ayat
+  ctx.font = `italic ${W*0.022}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.accent;
+  ctx.fillText(s.ayat, cx, cy - 100);
+
+  if (s.showLines) drawGoldLine(ctx, cx, cy - 80, W*0.2, theme.accent);
+
+  // Name
+  ctx.font = `bold ${W*0.042}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.text;
+  ctx.fillText(s.nameMendiang, cx, cy - 20);
+
+  // Tahun
+  ctx.font = `${W*0.018}px 'Cinzel', serif`;
+  ctx.fillStyle = theme.accent;
+  ctx.fillText(s.tahun, cx, cy + 25);
+
+  if (s.showLines) drawGoldLine(ctx, cx, cy + 45, W*0.2, theme.accent);
+
+  // Bottom pesan
+  ctx.font = `${W*0.02}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.text + 'bb';
+  wrapText(ctx, s.pesan, cx, cy + 200, W*0.55, W*0.03);
+
+  // Pengirim
+  ctx.font = `italic ${W*0.018}px 'EB Garamond', serif`;
+  ctx.fillStyle = theme.accent + 'cc';
+  ctx.fillText('— ' + s.pengirim + ' —', cx, H - 70);
+}
+
+// ============================================================
+// DOWNLOAD
+// ============================================================
+function downloadCard() {
+  const s = getState();
+  const cv = document.getElementById('downloadCanvas');
+  cv.width = 1320; cv.height = 924;
+  drawCardToCanvas(cv, s);
+  const a = document.createElement('a');
+  a.download = 'kartu-duka-cita.png';
+  a.href = cv.toDataURL('image/png', 1.0);
+  a.click();
+}
+
+document.getElementById('previewCanvas').onclick = downloadCard;
+
+// ============================================================
+// LIVE UPDATE
+// ============================================================
+['nameMendiang','tahun','ayat','pesan','pengirim'].forEach(id => {
+  document.getElementById(id).addEventListener('input', renderCard);
+});
+document.getElementById('showOrnament').addEventListener('change', renderCard);
+document.getElementById('showLines').addEventListener('change', renderCard);
+
+// ============================================================
+// BOOT
+// ============================================================
+initColorRow();
+initTemplateGrid();
+renderCard();
+
+// Re-render mini templates when theme changes (so they reflect new theme)
+const origDots = document.querySelectorAll('.color-dot');
+origDots.forEach(d => {
+  const orig = d.onclick;
+  d.onclick = function() {
+    orig.call(this);
+    document.querySelectorAll('.tmpl-btn canvas').forEach((cv, i) => drawMiniTemplate(cv, i));
+  };
+});
+</script>
+</body>
+</html>

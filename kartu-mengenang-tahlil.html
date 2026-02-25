@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kartu Mengenang / Tahlil — Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1a1410;--panel:#221c16;--border:rgba(200,160,80,.18);
+  --gold:#c9a050;--gold2:#e8d090;--ash:#8a7a60;--smoke:#d8c8a8;--text:#f5f0e8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--bg);
+  background-image:radial-gradient(ellipse at 20% 10%,rgba(80,55,20,.45) 0%,transparent 55%),
+                   radial-gradient(ellipse at 80% 90%,rgba(60,40,15,.4) 0%,transparent 55%);
+  color:var(--text);font-family:'EB Garamond',serif;min-height:100vh;
+}
+
+/* ── HEADER ── */
+.site-header{
+  text-align:center;padding:1.8rem 1rem 1.3rem;
+  border-bottom:1px solid var(--border);
+  background:rgba(0,0,0,.3);backdrop-filter:blur(6px);
+  position:sticky;top:0;z-index:100;
+}
+.site-header span{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.25em;color:var(--gold);display:block;margin-bottom:.25rem;}
+.site-header h1{font-family:'Cinzel',serif;font-size:clamp(1.1rem,3vw,1.7rem);font-weight:400;color:var(--gold2);letter-spacing:.08em;}
+
+/* ── LAYOUT ── */
+.workspace{display:flex;min-height:calc(100vh - 72px);}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:310px;min-width:270px;max-width:310px;
+  background:var(--panel);border-right:1px solid var(--border);
+  padding:1.4rem;overflow-y:auto;max-height:calc(100vh - 72px);
+  position:sticky;top:72px;
+}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(200,160,80,.3);border-radius:4px;}
+
+.s-section{margin-bottom:1.3rem;}
+.s-title{
+  font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.22em;
+  color:var(--gold);display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;
+}
+.s-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.field{margin-bottom:.8rem;}
+.field label{display:block;font-size:.8rem;color:var(--smoke);margin-bottom:.28rem;}
+.field input,.field textarea,.field select{
+  width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);
+  color:var(--text);font-family:'EB Garamond',serif;font-size:.93rem;
+  padding:.5rem .75rem;border-radius:3px;outline:none;transition:border-color .25s;
+}
+.field input:focus,.field textarea:focus{border-color:rgba(200,160,80,.5);}
+.field textarea{resize:vertical;min-height:85px;line-height:1.55;}
+
+/* Template grid */
+.tmpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;}
+.tmpl-item{
+  border:2px solid var(--border);border-radius:4px;cursor:pointer;
+  overflow:hidden;aspect-ratio:4/3;background:#fff;
+  transition:border-color .25s,transform .2s;position:relative;
+}
+.tmpl-item:hover{border-color:rgba(200,160,80,.7);transform:scale(1.03);}
+.tmpl-item.active{border-color:var(--gold);}
+.tmpl-item canvas{width:100%;height:100%;display:block;}
+.tmpl-item .lbl{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,.65);font-family:'Cinzel',serif;
+  font-size:.42rem;letter-spacing:.07em;color:var(--gold2);
+  text-align:center;padding:2px 0;
+}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem;}
+.toggle-row>span{font-size:.8rem;color:var(--smoke);}
+.sw{position:relative;width:36px;height:19px;cursor:pointer;}
+.sw input{display:none;}
+.sw-track{position:absolute;inset:0;background:rgba(255,255,255,.08);border-radius:20px;border:1px solid var(--border);transition:background .3s;}
+.sw-track::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;background:var(--ash);border-radius:50%;transition:transform .3s,background .3s;}
+.sw input:checked+.sw-track{background:rgba(200,160,80,.2);}
+.sw input:checked+.sw-track::after{transform:translateX(17px);background:var(--gold);}
+
+/* Color */
+.color-row{display:flex;gap:.4rem;flex-wrap:wrap;}
+.cdot{
+  width:24px;height:24px;border-radius:50%;cursor:pointer;
+  border:2px solid transparent;transition:all .2s;
+}
+.cdot:hover,.cdot.active{border-color:var(--gold);transform:scale(1.2);}
+
+/* Size pills */
+.size-pills{display:flex;gap:.4rem;flex-wrap:wrap;}
+.size-pill{
+  padding:.3rem .7rem;border:1px solid var(--border);border-radius:20px;
+  font-family:'Cinzel',serif;font-size:.57rem;letter-spacing:.08em;
+  color:var(--smoke);cursor:pointer;transition:all .25s;background:none;
+}
+.size-pill:hover,.size-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(200,160,80,.08);}
+
+/* Buttons */
+.btn-dl{
+  width:100%;padding:.78rem;margin-top:.5rem;
+  background:linear-gradient(135deg,#7a5810,var(--gold),#7a5810);
+  background-size:200%;border:none;color:#120e00;
+  font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.14em;
+  cursor:pointer;border-radius:3px;transition:background-position .4s,transform .2s;
+}
+.btn-dl:hover{background-position:100%;transform:translateY(-1px);}
+.btn-ref{
+  width:100%;padding:.65rem;margin-top:.4rem;
+  background:transparent;border:1px solid rgba(200,160,80,.35);
+  color:var(--gold2);font-family:'Cinzel',serif;font-size:.68rem;
+  letter-spacing:.1em;cursor:pointer;border-radius:3px;transition:all .3s;
+}
+.btn-ref:hover{background:rgba(200,160,80,.1);}
+
+/* ── MAIN ── */
+.main-area{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding:2rem 1.5rem 4rem;gap:1rem;overflow-y:auto;
+}
+.canvas-label{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.2em;color:var(--ash);text-align:center;}
+#mainCanvas{
+  width:min(600px,92vw);
+  box-shadow:0 20px 80px rgba(0,0,0,.8),0 0 0 1px rgba(200,160,80,.2);
+  border-radius:3px;display:block;cursor:pointer;transition:box-shadow .3s;
+}
+#mainCanvas:hover{box-shadow:0 24px 90px rgba(0,0,0,.85),0 0 0 1px rgba(200,160,80,.5);}
+.canvas-hint{font-size:.75rem;font-style:italic;color:var(--ash);text-align:center;}
+
+@media(max-width:720px){
+  .workspace{flex-direction:column;}
+  .sidebar{width:100%;max-width:100%;max-height:none;position:static;border-right:none;border-bottom:1px solid var(--border);}
+}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <span>✦ KARTU KENANGAN &amp; TAHLIL ✦</span>
+  <h1>Pembuat Kartu Mengenang / Haul</h1>
+</div>
+
+<div class="workspace">
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+
+  <div class="s-section">
+    <div class="s-title">Pilih Template</div>
+    <div class="tmpl-grid" id="tmplGrid"></div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Ukuran / Rasio</div>
+    <div class="size-pills">
+      <button class="size-pill active" data-w="1080" data-h="810">4:3 Landscape</button>
+      <button class="size-pill" data-w="1080" data-h="1080">1:1 Post</button>
+      <button class="size-pill" data-w="1080" data-h="1350">4:5 Feed</button>
+      <button class="size-pill" data-w="1080" data-h="1920">9:16 Story</button>
+    </div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Informasi Mendiang</div>
+    <div class="field"><label>Judul / Peringatan</label>
+      <input type="text" id="fJudul" value="Mengenang 2 Tahun Wafatnya"></div>
+    <div class="field"><label>Keterangan (Istri, Ibu, dsb.)</label>
+      <input type="text" id="fKet" value="Istri, Ibu, Nenek tercinta"></div>
+    <div class="field"><label>Nama Mendiang</label>
+      <input type="text" id="fName" value="Mahaeni bin Sugirman"></div>
+    <div class="field"><label>Tanggal Lahir</label>
+      <input type="text" id="fLahir" value="Lahir : 05 Mei 1877"></div>
+    <div class="field"><label>Tanggal Wafat</label>
+      <input type="text" id="fWafat" value="Wafat : 11 Oktober 1999"></div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Teks & Doa</div>
+    <div class="field"><label>Kaligrafi Arab (atas)</label>
+      <input type="text" id="fAyat" value="بِسْمِ اللَّهِ الرَّحْمٰنِ الرَّحِيْمِ"></div>
+    <div class="field"><label>Doa / Pesan</label>
+      <textarea id="fPesan">Semoga amal ibadah beliau diterima Allah SWT, diampuni segala dosa dan kekhilafannya, serta diluaskan dan diterangkan kuburnya. Aamiin Ya Rabbal Alamin</textarea></div>
+    <div class="field"><label>Dari / Pengirim</label>
+      <input type="text" id="fFrom" value="Keluarga Besar,"></div>
+    <div class="field"><label>Nama Keluarga / Instansi</label>
+      <input type="text" id="fFamily" value="Alm. Sugirman"></div>
+    <div class="field"><label>Handle Sosmed (opsional)</label>
+      <input type="text" id="fSocial" value=""></div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Warna Tema</div>
+    <div class="color-row" id="colorRow"></div>
+  </div>
+
+  <div class="s-section">
+    <div class="s-title">Elemen</div>
+    <div class="toggle-row"><span>Ornamen Bunga</span>
+      <label class="sw"><input type="checkbox" id="tFlower" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Bingkai Emas</span>
+      <label class="sw"><input type="checkbox" id="tBorder" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Teks Arab (Bismillah)</span>
+      <label class="sw"><input type="checkbox" id="tAyat" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Tanggal Lahir &amp; Wafat</span>
+      <label class="sw"><input type="checkbox" id="tDate" checked><span class="sw-track"></span></label></div>
+    <div class="toggle-row"><span>Nama Pengirim</span>
+      <label class="sw"><input type="checkbox" id="tFrom" checked><span class="sw-track"></span></label></div>
+  </div>
+
+  <button class="btn-dl" onclick="doDownload()">⬇ UNDUH KARTU PNG</button>
+  <button class="btn-ref" onclick="doRender()">↻ PERBARUI PRATINJAU</button>
+
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main-area">
+  <div class="canvas-label">✦ PRATINJAU KARTU ✦</div>
+  <canvas id="mainCanvas" width="1080" height="810"></canvas>
+  <p class="canvas-hint">Klik kartu untuk mengunduh · Resolusi tinggi siap cetak &amp; share</p>
+</main>
+</div>
+
+<canvas id="renderCanvas" width="1080" height="810" style="display:none"></canvas>
+
+<script>
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+const S = { template:0, theme:0, cw:1080, ch:810 };
+
+const THEMES = [
+  { name:'Putih Klasik',  bg:'#ffffff', bg2:'#faf6f0', border:'#c9a050', border2:'#e8d090', ink:'#1a1408', sub:'#5a4828', accent:'#8a5030', name_c:'#1a1408' },
+  { name:'Krem Elegan',   bg:'#fdf5e6', bg2:'#f5ead0', border:'#b8902a', border2:'#d4ae50', ink:'#1e1508', sub:'#6a5030', accent:'#7a4820', name_c:'#1e1508' },
+  { name:'Abu Mewah',     bg:'#f8f6f4', bg2:'#eeebe8', border:'#9090a0', border2:'#c0c0d0', ink:'#181820', sub:'#505060', accent:'#404050', name_c:'#181820' },
+  { name:'Mawar Pink',    bg:'#fff8f8', bg2:'#fdeee8', border:'#c87890', border2:'#e8a0b8', ink:'#2a1018', sub:'#784050', accent:'#8a3048', name_c:'#2a1018' },
+  { name:'Hijau Daun',    bg:'#f5faf0', bg2:'#e8f5e0', border:'#608840', border2:'#90c060', ink:'#102008', sub:'#386020', accent:'#285010', name_c:'#102008' },
+  { name:'Biru Langit',   bg:'#f0f8ff', bg2:'#e0eef8', border:'#5080b0', border2:'#80b0d8', ink:'#081828', sub:'#305070', accent:'#204060', name_c:'#081828' },
+];
+
+const TMPL_NAMES = ['Putih Bunga','Coklat Elegan','Minimalis','Sudut Emas','Klasik Penuh','Bunga Melingkar'];
+
+// ════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════
+function hex2rgb(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+function rgba(h,a){const[r,g,b]=hex2rgb(h);return`rgba(${r},${g},${b},${a})`;}
+
+function wrapLines(ctx,text,maxW){
+  const words=text.split(' ');const lines=[];let cur='';
+  words.forEach(w=>{const t=cur?cur+' '+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}else cur=t;});
+  if(cur)lines.push(cur);return lines;
+}
+function fillWrapped(ctx,text,x,y,maxW,lh,align='center'){
+  const sv=ctx.textAlign;ctx.textAlign=align;
+  const lines=wrapLines(ctx,text,maxW);
+  lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lh));
+  ctx.textAlign=sv;return lines.length*lh;
+}
+
+function drawGLine(ctx,cx,y,hw,color,lw=1){
+  const g=ctx.createLinearGradient(cx-hw,y,cx+hw,y);
+  g.addColorStop(0,'transparent');g.addColorStop(.3,color);
+  g.addColorStop(.7,color);g.addColorStop(1,'transparent');
+  ctx.save();ctx.strokeStyle=g;ctx.lineWidth=lw;
+  ctx.beginPath();ctx.moveTo(cx-hw,y);ctx.lineTo(cx+hw,y);ctx.stroke();ctx.restore();
+}
+
+// ── Watercolor Rose ──
+function drawRose(ctx,cx,cy,size,hue,alpha=1){
+  ctx.save();ctx.globalAlpha*=alpha;
+  // petals — outer
+  const petalColors=[
+    `hsla(${hue},60%,70%,0.7)`,`hsla(${hue+10},55%,65%,0.6)`,`hsla(${hue-10},65%,72%,0.65)`,
+    `hsla(${hue+20},50%,68%,0.6)`,`hsla(${hue-20},70%,75%,0.5)`,
+  ];
+  for(let layer=0;layer<3;layer++){
+    const petalCount=5+layer*2;const r=size*(0.7+layer*.15);
+    for(let i=0;i<petalCount;i++){
+      const a=(i/petalCount)*Math.PI*2+layer*.3;
+      const px=cx+Math.cos(a)*r*.55,py=cy+Math.sin(a)*r*.55;
+      const cp1x=cx+Math.cos(a-0.6)*r,cp1y=cy+Math.sin(a-0.6)*r;
+      const cp2x=cx+Math.cos(a+0.6)*r,cp2y=cy+Math.sin(a+0.6)*r;
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);ctx.bezierCurveTo(cp1x,cp1y,cp2x,cp2y,px,py);
+      ctx.closePath();
+      const pg=ctx.createRadialGradient(cx,cy,0,px,py,r);
+      pg.addColorStop(0,`hsla(${hue+5},65%,85%,0.5)`);
+      pg.addColorStop(1,petalColors[i%petalColors.length]);
+      ctx.fillStyle=pg;ctx.fill();
+    }
+  }
+  // center
+  const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,size*.3);
+  cg.addColorStop(0,`hsla(${hue+10},70%,80%,0.9)`);
+  cg.addColorStop(1,`hsla(${hue},60%,65%,0.6)`);
+  ctx.beginPath();ctx.arc(cx,cy,size*.28,0,Math.PI*2);
+  ctx.fillStyle=cg;ctx.fill();
+  // spiral center
+  for(let i=0;i<8;i++){
+    const a=i*Math.PI/4;const r2=size*.12;
+    ctx.beginPath();
+    ctx.arc(cx+Math.cos(a)*r2*.4,cy+Math.sin(a)*r2*.4,size*.07,0,Math.PI*2);
+    ctx.fillStyle=`hsla(${hue+5},65%,75%,0.6)`;ctx.fill();
+  }
+  ctx.restore();
+}
+
+// ── Watercolor Leaf ──
+function drawLeaf(ctx,cx,cy,size,angle,hue=35,alpha=.7){
+  ctx.save();ctx.globalAlpha*=alpha;
+  ctx.translate(cx,cy);ctx.rotate(angle);
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.bezierCurveTo(-size*.3,-size*.5,-size*.4,-size*.9,0,-size);
+  ctx.bezierCurveTo(size*.4,-size*.9,size*.3,-size*.5,0,0);
+  const lg=ctx.createLinearGradient(0,0,0,-size);
+  lg.addColorStop(0,`hsla(${hue},55%,55%,0.8)`);
+  lg.addColorStop(1,`hsla(${hue+15},50%,65%,0.5)`);
+  ctx.fillStyle=lg;ctx.fill();
+  // vein
+  ctx.strokeStyle=`hsla(${hue+10},40%,45%,0.4)`;ctx.lineWidth=.8;
+  ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-size*.85);ctx.stroke();
+  ctx.restore();
+}
+
+// ── Full Floral Corner Cluster ──
+function drawFloralCorner(ctx,x,y,size,position,hue=340){
+  // position: 'tr'=top-right, 'bl'=bottom-left, 'tl'=top-left, 'br'=bottom-right
+  ctx.save();ctx.translate(x,y);
+  const flip = {tr:[1,1],bl:[-1,-1],tl:[-1,1],br:[1,-1]}[position]||[1,1];
+  ctx.scale(flip[0],flip[1]);
+
+  const s=size;
+  // leaves first (behind)
+  drawLeaf(ctx,s*.05,s*.05,s*.6,-0.3,35,.65);
+  drawLeaf(ctx,s*.2,-s*.05,s*.5,-0.8,40,.55);
+  drawLeaf(ctx,-s*.1,s*.15,s*.45,0.4,32,.5);
+  drawLeaf(ctx,s*.35,s*.12,s*.55,-1.1,42,.6);
+  drawLeaf(ctx,s*.55,-s*.05,s*.4,-1.5,38,.5);
+  drawLeaf(ctx,s*.1,s*.3,s*.4,0.1,30,.5);
+  drawLeaf(ctx,s*.4,s*.2,s*.35,-0.6,36,.45);
+  // small accent leaves
+  drawLeaf(ctx,-s*.05,s*.35,s*.3,0.6,38,.4);
+  drawLeaf(ctx,s*.6,s*.1,s*.3,-1.8,32,.4);
+
+  // main roses
+  drawRose(ctx,s*.28,s*.18,s*.32,hue,.92);
+  drawRose(ctx,s*.08,s*.38,s*.22,hue+15,.8);
+  drawRose(ctx,s*.5,s*.06,s*.2,hue+25,.75);
+  drawRose(ctx,s*.42,s*.32,s*.18,hue-10,.7);
+  // tiny rosebuds
+  drawRose(ctx,s*.65,s*.22,s*.12,hue+5,.6);
+  drawRose(ctx,s*.2,s*.55,s*.1,hue+20,.5);
+  drawRose(ctx,s*.58,s*.4,s*.1,hue-5,.55);
+
+  ctx.restore();
+}
+
+// ── Draw background ──
+function drawBg(ctx,W,H,theme){
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,theme.bg2);g.addColorStop(1,theme.bg);
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+}
+
+// ── Gold border ──
+function drawGoldBorder(ctx,W,H,pad,theme){
+  ctx.strokeStyle=theme.border;ctx.lineWidth=2;ctx.strokeRect(pad,pad,W-pad*2,H-pad*2);
+  ctx.strokeStyle=rgba(theme.border2,.5);ctx.lineWidth=.8;
+  ctx.strokeRect(pad+8,pad+8,W-pad*2-16,H-pad*2-16);
+}
+
+function getVals(){
+  return {
+    judul: document.getElementById('fJudul').value,
+    ket:   document.getElementById('fKet').value,
+    name:  document.getElementById('fName').value,
+    lahir: document.getElementById('fLahir').value,
+    wafat: document.getElementById('fWafat').value,
+    ayat:  document.getElementById('fAyat').value,
+    pesan: document.getElementById('fPesan').value,
+    from:  document.getElementById('fFrom').value,
+    family:document.getElementById('fFamily').value,
+    social:document.getElementById('fSocial').value,
+    flower: document.getElementById('tFlower').checked,
+    border: document.getElementById('tBorder').checked,
+    showAyat:document.getElementById('tAyat').checked,
+    showDate:document.getElementById('tDate').checked,
+    showFrom:document.getElementById('tFrom').checked,
+  };
+}
+
+// ════════════════════════════════════════════════
+// TEMPLATE RENDERERS
+// ════════════════════════════════════════════════
+
+// ── T0: PUTIH BUNGA (closest to reference) ──
+function renderT0(ctx,W,H,theme,v){
+  drawBg(ctx,W,H,theme);
+
+  const pad=W*.04;
+  if(v.border) drawGoldBorder(ctx,W,H,pad,theme);
+
+  // FLORAL CORNERS — same as reference
+  const flSize=W*.28;
+  if(v.flower){
+    drawFloralCorner(ctx,W-pad,pad,flSize,'tr',335);   // top right
+    drawFloralCorner(ctx,pad,H-pad,flSize,'bl',340);   // bottom left
+  }
+
+  const cx=W/2;
+  let y=pad+H*.06;
+
+  // Ayat/Bismillah
+  if(v.showAyat){
+    ctx.font=`${W*.038}px 'Amiri',serif`;
+    ctx.fillStyle=theme.ink;ctx.textAlign='center';
+    ctx.fillText(v.ayat,cx,y+W*.04);
+    y+=W*.065;
+  }
+
+  // Judul (script style)
+  ctx.font=`italic bold ${W*.048}px 'Playfair Display',serif`;
+  ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  ctx.fillText(v.judul,cx,y+W*.05);
+  y+=W*.065;
+
+  // Keterangan
+  ctx.font=`${W*.022}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.sub;ctx.textAlign='center';
+  ctx.fillText(v.ket,cx,y+W*.01);
+  y+=W*.04;
+
+  // Name — big calligraphy
+  ctx.font=`italic ${W*.068}px 'Great Vibes',cursive`;
+  ctx.fillStyle=theme.name_c;ctx.textAlign='center';
+  ctx.fillText(v.name,cx,y+W*.07);
+  y+=W*.09;
+
+  // Dates
+  if(v.showDate){
+    ctx.font=`${W*.022}px 'EB Garamond',serif`;
+    ctx.fillStyle=theme.sub;ctx.textAlign='center';
+    ctx.fillText(v.lahir+'     '+v.wafat,cx,y+W*.01);
+    y+=W*.038;
+  }
+
+  // Thin divider
+  drawGLine(ctx,cx,y+W*.015,W*.35,theme.border,1.5);
+  y+=W*.04;
+
+  // Pesan/Doa
+  ctx.font=`${W*.024}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,y+W*.015,W*.62,W*.036);
+  y+=ph+W*.02;
+
+  // Pengirim
+  if(v.showFrom){
+    y+=W*.01;
+    ctx.font=`${W*.022}px 'EB Garamond',serif`;
+    ctx.fillStyle=theme.sub;ctx.textAlign='center';
+    ctx.fillText(v.from,cx,y+W*.025);
+    ctx.font=`bold ${W*.024}px 'EB Garamond',serif`;
+    ctx.fillStyle=theme.ink;
+    ctx.fillText(v.family,cx,y+W*.055);
+  }
+
+  // Social
+  if(v.social){
+    ctx.font=`${W*.018}px 'Cinzel',serif`;
+    ctx.fillStyle=rgba(theme.border,.7);ctx.textAlign='center';
+    ctx.fillText(v.social,cx,H-pad-W*.02);
+  }
+}
+
+// ── T1: COKLAT ELEGAN ──
+function renderT1(ctx,W,H,theme,v){
+  // Warm parchment bg with subtle texture
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'#f9f0dc');g.addColorStop(1,'#f0e0c0');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+
+  const pad=W*.045;
+  if(v.border){
+    ctx.strokeStyle='#b8902a';ctx.lineWidth=3;ctx.strokeRect(pad,pad,W-pad*2,H-pad*2);
+    ctx.strokeStyle='rgba(184,144,42,.3)';ctx.lineWidth=1;
+    ctx.strokeRect(pad+10,pad+10,W-pad*2-20,H-pad*2-20);
+  }
+
+  // Corner ornaments (geometric)
+  [[pad+2,pad+2,0],[W-pad-2,pad+2,90],[W-pad-2,H-pad-2,180],[pad+2,H-pad-2,270]].forEach(([x,y,r])=>{
+    ctx.save();ctx.translate(x,y);ctx.rotate(r*Math.PI/180);
+    ctx.strokeStyle='#c9a050';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(0,W*.06);ctx.lineTo(0,0);ctx.lineTo(W*.06,0);ctx.stroke();
+    ctx.fillStyle='#c9a050';ctx.beginPath();ctx.arc(W*.015,W*.015,3,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  });
+
+  if(v.flower){
+    drawFloralCorner(ctx,W-pad,pad,W*.22,'tr',330);
+    drawFloralCorner(ctx,pad,H-pad,W*.22,'bl',335);
+  }
+
+  const cx=W/2;let y=pad+H*.07;
+
+  if(v.showAyat){
+    ctx.font=`${W*.038}px 'Amiri',serif`;
+    ctx.fillStyle='#2a1808';ctx.textAlign='center';
+    ctx.fillText(v.ayat,cx,y+W*.04);y+=W*.065;
+  }
+
+  drawGLine(ctx,cx,y,W*.3,'#b8902a',1.5);y+=W*.03;
+
+  ctx.font=`italic bold ${W*.046}px 'Playfair Display',serif`;
+  ctx.fillStyle='#1a1008';ctx.textAlign='center';
+  ctx.fillText(v.judul,cx,y+W*.048);y+=W*.062;
+
+  ctx.font=`italic ${W*.022}px 'EB Garamond',serif`;
+  ctx.fillStyle='#6a5030';ctx.textAlign='center';
+  ctx.fillText(v.ket,cx,y+W*.01);y+=W*.038;
+
+  drawGLine(ctx,cx,y,W*.25,'#b8902a',1);y+=W*.02;
+
+  ctx.font=`italic ${W*.066}px 'Great Vibes',cursive`;
+  ctx.fillStyle='#1a1008';ctx.textAlign='center';
+  ctx.fillText(v.name,cx,y+W*.068);y+=W*.085;
+
+  if(v.showDate){
+    ctx.font=`${W*.021}px 'EB Garamond',serif`;
+    ctx.fillStyle='#6a5030';ctx.textAlign='center';
+    ctx.fillText(v.lahir+'   |   '+v.wafat,cx,y+W*.01);y+=W*.038;
+  }
+
+  drawGLine(ctx,cx,y+W*.01,W*.32,'#b8902a',1.5);y+=W*.04;
+
+  ctx.font=`${W*.023}px 'EB Garamond',serif`;
+  ctx.fillStyle='#1e1408';ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,y+W*.015,W*.6,W*.035);
+  y+=ph+W*.02;
+
+  if(v.showFrom){
+    ctx.font=`${W*.021}px 'EB Garamond',serif`;
+    ctx.fillStyle='#6a5030';ctx.textAlign='center';
+    ctx.fillText(v.from,cx,y+W*.025);
+    ctx.font=`bold ${W*.024}px 'EB Garamond',serif`;
+    ctx.fillStyle='#1e1408';ctx.fillText(v.family,cx,y+W*.055);
+  }
+  if(v.social){ctx.font=`${W*.017}px 'Cinzel',serif`;ctx.fillStyle='rgba(180,144,42,.7)';ctx.textAlign='center';ctx.fillText(v.social,cx,H-pad-W*.02);}
+}
+
+// ── T2: MINIMALIS ──
+function renderT2(ctx,W,H,theme,v){
+  drawBg(ctx,W,H,theme);
+  const pad=W*.05;
+  if(v.border){
+    ctx.strokeStyle=theme.border;ctx.lineWidth=1.5;ctx.strokeRect(pad,pad,W-pad*2,H-pad*2);
+  }
+  // minimal top line pair
+  ctx.fillStyle=theme.border;ctx.fillRect(pad,pad,W-pad*2,2);ctx.fillRect(pad,pad+6,W-pad*2,1);
+
+  if(v.flower){
+    drawFloralCorner(ctx,W,0,W*.18,'tr',335);
+    drawFloralCorner(ctx,0,H,W*.18,'bl',340);
+  }
+
+  const cx=W/2;let y=pad+H*.06;
+  if(v.showAyat){ctx.font=`${W*.036}px 'Amiri',serif`;ctx.fillStyle=theme.ink;ctx.textAlign='center';ctx.fillText(v.ayat,cx,y+W*.038);y+=W*.06;}
+
+  ctx.font=`italic ${W*.044}px 'Playfair Display',serif`;
+  ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  ctx.fillText(v.judul,cx,y+W*.046);y+=W*.06;
+
+  ctx.font=`${W*.02}px 'Cinzel',serif`;
+  ctx.fillStyle=theme.sub;ctx.textAlign='center';
+  ctx.fillText(v.ket.toUpperCase(),cx,y+W*.01);y+=W*.035;
+
+  drawGLine(ctx,cx,y+W*.01,W*.2,theme.border,1.5);y+=W*.03;
+
+  ctx.font=`italic ${W*.065}px 'Great Vibes',cursive`;
+  ctx.fillStyle=theme.name_c;ctx.textAlign='center';
+  ctx.fillText(v.name,cx,y+W*.068);y+=W*.085;
+
+  if(v.showDate){ctx.font=`${W*.02}px 'Cinzel',serif`;ctx.fillStyle=theme.sub;ctx.textAlign='center';ctx.fillText(v.lahir+'   ·   '+v.wafat,cx,y+W*.01);y+=W*.036;}
+
+  drawGLine(ctx,cx,y+W*.012,W*.3,theme.border,1);y+=W*.038;
+
+  ctx.font=`${W*.022}px 'EB Garamond',serif`;ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,y+W*.015,W*.58,W*.035);y+=ph+W*.02;
+
+  if(v.showFrom){ctx.font=`${W*.02}px 'EB Garamond',serif`;ctx.fillStyle=theme.sub;ctx.textAlign='center';ctx.fillText(v.from,cx,y+W*.025);ctx.font=`bold ${W*.022}px 'EB Garamond',serif`;ctx.fillStyle=theme.ink;ctx.fillText(v.family,cx,y+W*.052);}
+  if(v.social){ctx.font=`${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.border,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H-pad-W*.018);}
+
+  // bottom lines
+  ctx.fillStyle=theme.border;ctx.fillRect(pad,H-pad-1,W-pad*2,2);ctx.fillRect(pad,H-pad-7,W-pad*2,1);
+}
+
+// ── T3: SUDUT EMAS ──
+function renderT3(ctx,W,H,theme,v){
+  drawBg(ctx,W,H,theme);
+  const pad=W*.04;
+  if(v.border){
+    ctx.strokeStyle=theme.border;ctx.lineWidth=2.5;ctx.strokeRect(pad,pad,W-pad*2,H-pad*2);
+    ctx.strokeStyle=rgba(theme.border,.3);ctx.lineWidth=1;ctx.strokeRect(pad+12,pad+12,W-pad*2-24,H-pad*2-24);
+  }
+  // Gold corner decorations
+  const cs=W*.07;
+  [[pad,pad,0],[W-pad,pad,90],[W-pad,H-pad,180],[pad,H-pad,270]].forEach(([x,y,r])=>{
+    ctx.save();ctx.translate(x,y);ctx.rotate(r*Math.PI/180);
+    ctx.strokeStyle=theme.border;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(0,cs);ctx.lineTo(0,0);ctx.lineTo(cs,0);ctx.stroke();
+    ctx.lineWidth=.8;ctx.strokeStyle=rgba(theme.border,.5);
+    ctx.beginPath();ctx.moveTo(0,cs*.6);ctx.lineTo(0,cs*.15);ctx.lineTo(cs*.6,cs*.15);ctx.stroke();
+    ctx.fillStyle=theme.border;ctx.beginPath();ctx.arc(cs*.12,cs*.12,2.5,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  });
+
+  if(v.flower){
+    drawFloralCorner(ctx,W-pad,pad,W*.24,'tr',330);
+    drawFloralCorner(ctx,pad,H-pad,W*.24,'bl',335);
+  }
+
+  const cx=W/2;let y=pad+H*.07;
+  if(v.showAyat){ctx.font=`${W*.038}px 'Amiri',serif`;ctx.fillStyle=theme.ink;ctx.textAlign='center';ctx.fillText(v.ayat,cx,y+W*.04);y+=W*.065;}
+
+  ctx.font=`italic bold ${W*.048}px 'Playfair Display',serif`;
+  ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  ctx.fillText(v.judul,cx,y+W*.05);y+=W*.065;
+
+  ctx.font=`italic ${W*.022}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.sub;ctx.textAlign='center';
+  ctx.fillText(v.ket,cx,y+W*.01);y+=W*.038;
+
+  ctx.font=`${W*.014}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.border,.7);ctx.textAlign='center';
+  ctx.fillText('— IN MEMORIAM —',cx,y+W*.01);y+=W*.035;
+
+  ctx.font=`italic ${W*.068}px 'Great Vibes',cursive`;
+  ctx.fillStyle=theme.name_c;ctx.textAlign='center';
+  ctx.fillText(v.name,cx,y+W*.07);y+=W*.088;
+
+  if(v.showDate){ctx.font=`${W*.021}px 'EB Garamond',serif`;ctx.fillStyle=theme.sub;ctx.textAlign='center';ctx.fillText(v.lahir+'   |   '+v.wafat,cx,y+W*.01);y+=W*.038;}
+
+  drawGLine(ctx,cx,y+W*.012,W*.35,theme.border,1.5);y+=W*.04;
+
+  ctx.font=`${W*.023}px 'EB Garamond',serif`;ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,y+W*.015,W*.6,W*.036);y+=ph+W*.02;
+
+  if(v.showFrom){ctx.font=`${W*.021}px 'EB Garamond',serif`;ctx.fillStyle=theme.sub;ctx.textAlign='center';ctx.fillText(v.from,cx,y+W*.025);ctx.font=`bold ${W*.024}px 'EB Garamond',serif`;ctx.fillStyle=theme.ink;ctx.fillText(v.family,cx,y+W*.055);}
+  if(v.social){ctx.font=`${W*.017}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.border,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H-pad-W*.02);}
+}
+
+// ── T4: KLASIK PENUH ──
+function renderT4(ctx,W,H,theme,v){
+  drawBg(ctx,W,H,theme);
+  const pad=W*.04;
+  if(v.border){
+    ctx.strokeStyle=theme.border;ctx.lineWidth=3;ctx.strokeRect(pad,pad,W-pad*2,H-pad*2);
+    ctx.strokeStyle=rgba(theme.border,.3);ctx.lineWidth=.8;ctx.strokeRect(pad+14,pad+14,W-pad*2-28,H-pad*2-28);
+  }
+
+  if(v.flower){
+    drawFloralCorner(ctx,W-pad,pad,W*.25,'tr',335);
+    drawFloralCorner(ctx,pad,H-pad,W*.25,'bl',338);
+    drawFloralCorner(ctx,pad,pad,W*.15,'tl',325);
+    drawFloralCorner(ctx,W-pad,H-pad,W*.15,'br',342);
+  }
+
+  const cx=W/2;let y=pad+H*.07;
+  if(v.showAyat){ctx.font=`${W*.038}px 'Amiri',serif`;ctx.fillStyle=theme.ink;ctx.textAlign='center';ctx.fillText(v.ayat,cx,y+W*.04);y+=W*.065;}
+
+  ctx.font=`italic bold ${W*.046}px 'Playfair Display',serif`;
+  ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  ctx.fillText(v.judul,cx,y+W*.048);y+=W*.062;
+
+  ctx.font=`italic ${W*.022}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.sub;ctx.textAlign='center';
+  ctx.fillText(v.ket,cx,y+W*.01);y+=W*.038;
+
+  drawGLine(ctx,cx,y,W*.35,theme.border,1.5);y+=W*.025;
+
+  ctx.font=`italic ${W*.068}px 'Great Vibes',cursive`;
+  ctx.fillStyle=theme.name_c;ctx.textAlign='center';
+  ctx.fillText(v.name,cx,y+W*.07);y+=W*.09;
+
+  if(v.showDate){ctx.font=`${W*.021}px 'EB Garamond',serif`;ctx.fillStyle=theme.sub;ctx.textAlign='center';ctx.fillText(v.lahir+'   |   '+v.wafat,cx,y+W*.01);y+=W*.038;}
+
+  drawGLine(ctx,cx,y+W*.012,W*.3,theme.border,1.5);y+=W*.04;
+
+  ctx.font=`${W*.022}px 'EB Garamond',serif`;ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,y+W*.015,W*.62,W*.034);y+=ph+W*.02;
+
+  if(v.showFrom){ctx.font=`${W*.021}px 'EB Garamond',serif`;ctx.fillStyle=theme.sub;ctx.textAlign='center';ctx.fillText(v.from,cx,y+W*.025);ctx.font=`bold ${W*.024}px 'EB Garamond',serif`;ctx.fillStyle=theme.ink;ctx.fillText(v.family,cx,y+W*.055);}
+  if(v.social){ctx.font=`${W*.017}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.border,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H-pad-W*.018);}
+}
+
+// ── T5: BUNGA MELINGKAR ──
+function renderT5(ctx,W,H,theme,v){
+  drawBg(ctx,W,H,theme);
+  const cx=W/2,cy=H/2;
+
+  // Scattered petite roses around edges
+  if(v.flower){
+    const positions=[
+      [W*.1,H*.12,W*.09,335],[W*.35,H*.05,W*.07,340],[W*.65,H*.06,W*.08,330],
+      [W*.9,H*.12,W*.1,338],[W*.05,H*.5,W*.08,342],[W*.95,H*.48,W*.09,333],
+      [W*.08,H*.88,W*.09,336],[W*.35,H*.95,W*.07,340],[W*.65,H*.93,W*.08,332],[W*.92,H*.85,W*.1,337],
+    ];
+    positions.forEach(([x,y,s,h])=>drawFloralCorner(ctx,x+s,y,s,'br',h));
+  }
+
+  if(v.border){
+    ctx.strokeStyle=theme.border;ctx.lineWidth=2;ctx.strokeRect(W*.04,H*.04,W*.92,H*.92);
+    ctx.strokeStyle=rgba(theme.border,.3);ctx.lineWidth=.7;ctx.strokeRect(W*.055,H*.055,W*.89,H*.89);
+  }
+
+  const pad=W*.06;let y=pad+H*.04;
+  if(v.showAyat){ctx.font=`${W*.036}px 'Amiri',serif`;ctx.fillStyle=theme.ink;ctx.textAlign='center';ctx.fillText(v.ayat,cx,y+W*.037);y+=W*.06;}
+
+  ctx.font=`italic bold ${W*.044}px 'Playfair Display',serif`;
+  ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  ctx.fillText(v.judul,cx,y+W*.046);y+=W*.06;
+
+  ctx.font=`italic ${W*.021}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.sub;ctx.textAlign='center';
+  ctx.fillText(v.ket,cx,y+W*.01);y+=W*.036;
+
+  drawGLine(ctx,cx,y+W*.01,W*.3,theme.border,1.5);y+=W*.03;
+
+  ctx.font=`italic ${W*.068}px 'Great Vibes',cursive`;
+  ctx.fillStyle=theme.name_c;ctx.textAlign='center';
+  ctx.fillText(v.name,cx,y+W*.07);y+=W*.088;
+
+  if(v.showDate){ctx.font=`${W*.021}px 'EB Garamond',serif`;ctx.fillStyle=theme.sub;ctx.textAlign='center';ctx.fillText(v.lahir+'   |   '+v.wafat,cx,y+W*.01);y+=W*.037;}
+
+  drawGLine(ctx,cx,y+W*.012,W*.3,theme.border,1);y+=W*.037;
+
+  ctx.font=`${W*.022}px 'EB Garamond',serif`;ctx.fillStyle=theme.ink;ctx.textAlign='center';
+  const ph=fillWrapped(ctx,v.pesan,cx,y+W*.015,W*.6,W*.034);y+=ph+W*.018;
+
+  if(v.showFrom){ctx.font=`${W*.021}px 'EB Garamond',serif`;ctx.fillStyle=theme.sub;ctx.textAlign='center';ctx.fillText(v.from,cx,y+W*.025);ctx.font=`bold ${W*.023}px 'EB Garamond',serif`;ctx.fillStyle=theme.ink;ctx.fillText(v.family,cx,y+W*.052);}
+  if(v.social){ctx.font=`${W*.016}px 'Cinzel',serif`;ctx.fillStyle=rgba(theme.border,.65);ctx.textAlign='center';ctx.fillText(v.social,cx,H-pad-W*.018);}
+}
+
+const RENDERERS=[renderT0,renderT1,renderT2,renderT3,renderT4,renderT5];
+
+// ════════════════════════════════════════════════
+// MAIN RENDER
+// ════════════════════════════════════════════════
+function doRenderToCanvas(cv){
+  cv.width=S.cw;cv.height=S.ch;
+  const ctx=cv.getContext('2d');
+  const v=getVals();
+  const theme=THEMES[S.theme];
+  (RENDERERS[S.template]||renderT0)(ctx,S.cw,S.ch,theme,v);
+}
+function doRender(){doRenderToCanvas(document.getElementById('mainCanvas'));renderAllMini();}
+function doDownload(){
+  const cv=document.getElementById('renderCanvas');
+  doRenderToCanvas(cv);
+  const a=document.createElement('a');
+  a.download=`mengenang-${Date.now()}.png`;
+  a.href=cv.toDataURL('image/png',1);a.click();
+}
+document.getElementById('mainCanvas').onclick=doDownload;
+
+// ════════════════════════════════════════════════
+// MINI PREVIEWS
+// ════════════════════════════════════════════════
+function renderMini(cv,tid){
+  const W=100,H=75;cv.width=W;cv.height=H;
+  const ctx=cv.getContext('2d');
+  const theme=THEMES[S.theme];
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,theme.bg2);g.addColorStop(1,theme.bg);
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  if(tid!==2){ctx.strokeStyle=theme.border;ctx.lineWidth=1.5;ctx.strokeRect(3,3,W-6,H-6);}
+  // mini flowers
+  drawFloralCorner(ctx,W-3,3,W*.25,'tr',335);
+  drawFloralCorner(ctx,3,H-3,W*.25,'bl',340);
+  // sample text
+  ctx.font=`italic ${H*.18}px 'Great Vibes',cursive`;
+  ctx.fillStyle=theme.ink;ctx.textAlign='center';ctx.fillText('Mengenang',W/2,H*.5);
+  ctx.font=`${H*.12}px 'EB Garamond',serif`;
+  ctx.fillStyle=theme.sub;ctx.textAlign='center';ctx.fillText('Nama Mendiang',W/2,H*.68);
+  if(tid===3||tid===4){
+    [[3,3,0],[W-3,3,90],[W-3,H-3,180],[3,H-3,270]].forEach(([x,y,r])=>{
+      ctx.save();ctx.translate(x,y);ctx.rotate(r*Math.PI/180);
+      ctx.strokeStyle=theme.border;ctx.lineWidth=1.2;
+      ctx.beginPath();ctx.moveTo(0,8);ctx.lineTo(0,0);ctx.lineTo(8,0);ctx.stroke();ctx.restore();
+    });
+  }
+}
+function renderAllMini(){document.querySelectorAll('.tmpl-item canvas').forEach((cv,i)=>renderMini(cv,i));}
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+function initTemplates(){
+  const grid=document.getElementById('tmplGrid');
+  TMPL_NAMES.forEach((name,i)=>{
+    const item=document.createElement('div');
+    item.className='tmpl-item'+(i===0?' active':'');
+    const cv=document.createElement('canvas');
+    const lbl=document.createElement('div');
+    lbl.className='lbl';lbl.textContent=name;
+    item.appendChild(cv);item.appendChild(lbl);
+    item.onclick=()=>{
+      document.querySelectorAll('.tmpl-item').forEach(x=>x.classList.remove('active'));
+      item.classList.add('active');S.template=i;doRender();
+    };
+    grid.appendChild(item);
+  });
+}
+function initColors(){
+  const row=document.getElementById('colorRow');
+  THEMES.forEach((t,i)=>{
+    const d=document.createElement('div');
+    d.className='cdot'+(i===0?' active':'');
+    d.style.background=`linear-gradient(135deg,${t.bg} 40%,${t.border} 100%)`;
+    d.style.borderColor=t.border;d.title=t.name;
+    d.onclick=()=>{
+      document.querySelectorAll('.cdot').forEach(x=>x.classList.remove('active'));
+      d.classList.add('active');S.theme=i;doRender();
+    };
+    row.appendChild(d);
+  });
+}
+function initSizes(){
+  document.querySelectorAll('.size-pill').forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll('.size-pill').forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');S.cw=+btn.dataset.w;S.ch=+btn.dataset.h;doRender();
+    };
+  });
+}
+function initLive(){
+  ['fJudul','fKet','fName','fLahir','fWafat','fAyat','fPesan','fFrom','fFamily','fSocial'].forEach(id=>{
+    document.getElementById(id).addEventListener('input',doRender);
+  });
+  ['tFlower','tBorder','tAyat','tDate','tFrom'].forEach(id=>{
+    document.getElementById(id).addEventListener('change',doRender);
+  });
+}
+initTemplates();initColors();initSizes();initLive();
+document.fonts.ready.then(()=>{renderAllMini();doRender();});
+setTimeout(()=>{renderAllMini();doRender();},700);
+</script>
+</body>
+</html>
